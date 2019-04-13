@@ -1,11 +1,13 @@
-package com.example.ran.happymoments.screens.detection.views;
+package com.example.ran.happymoments.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
+import com.example.ran.happymoments.screens.detection.views.PhotoItemView;
+import com.example.ran.happymoments.screens.detection.views.PhotoItemViewImpl;
+
 import java.util.List;
 
 public class RecycleViewImageAdapter extends RecyclerView.Adapter<RecycleViewImageAdapter.ViewHolder> implements PhotoItemView.Listener {

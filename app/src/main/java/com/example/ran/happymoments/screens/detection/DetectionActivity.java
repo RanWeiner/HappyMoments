@@ -49,8 +49,6 @@ public class DetectionActivity extends AppCompatActivity implements DetectionVie
         mSeriesGenerator = new SeriesGeneratorImpl(getApplicationContext());
         mOutputPhotosPath = new ArrayList<>();
         setContentView(mView.getRootView());
-
-        Toast.makeText(this, " SIZE" + mInputPhotosPath.size() , Toast.LENGTH_LONG).show();
     }
 
 

@@ -1,6 +1,5 @@
 package com.example.ran.happymoments.screens.detection.views;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -20,8 +18,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 //import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.example.ran.happymoments.R;
-import com.example.ran.happymoments.screens.detection.DetectionActivity;
-import com.google.android.gms.fido.fido2.api.common.RequestOptions;
+import com.example.ran.happymoments.adapters.RecycleViewImageAdapter;
 
 import java.util.List;
 
@@ -29,7 +26,6 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
 
     private View mRootView;
     private Button mDetectBtn , mAddBtn;
-    private ProgressBar mProgressBar;
     private Dialog mLoaderDialog;
     private RecyclerView mRecyclerPhotos;
     private RecycleViewImageAdapter mAdapter;
@@ -40,7 +36,6 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
         mRootView = inflater.inflate(R.layout.activity_detection, container);
         mDetectBtn = mRootView.findViewById(R.id.detect_btn_id);
         mAddBtn = mRootView.findViewById(R.id.add_more_btn);
-        mProgressBar = mRootView.findViewById(R.id.progress_bar);
         mLoaderDialog  = new Dialog(getContext());
         mRecyclerPhotos = mRootView.findViewById(R.id.gallery);
         mRecyclerPhotos.setHasFixedSize(true);
@@ -98,16 +93,11 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
     public void detectionStarted() {
         showDialog();
         Toast.makeText(getContext() , "Start Detection...",Toast.LENGTH_LONG).show();
-//        mProgressBar.setVisibility(View.VISIBLE);
-//        mDetectBtn.setEnabled(false);
-//        mAddBtn.setEnabled(false);
     }
 
     public void detectionFinished() {
         hideDialog();
         Toast.makeText(getContext(), "Finished!",Toast.LENGTH_LONG).show();
-        mProgressBar.setVisibility(View.INVISIBLE);
-        mDetectBtn.setEnabled(true);
     }
 
     public void bindPhotos(List<String> photosPath) {

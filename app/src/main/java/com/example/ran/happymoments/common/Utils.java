@@ -62,47 +62,6 @@ public class Utils {
                 .setPositiveButton("Connect", dialogClickListener).setNegativeButton("Exit", dialogClickListener).show();
     }
 
-    // Reading file paths from SDCard
-    public ArrayList<String> getFilePaths() {
-        ArrayList<String> filePaths = new ArrayList<String>();
-
-        File directory = new File(Environment.getExternalStorageDirectory()
-                + File.separator + AppConstants.HAPPY_MOMENTS_ALBUM);
-
-        // check for directory
-        if (directory.isDirectory()) {
-            // getting list of file paths
-            File[] listFiles = directory.listFiles();
-
-            if (listFiles.length > 0) {
-
-                for (int i = 0; i < listFiles.length; i++) {
-
-                    // get file path
-                    String filePath = listFiles[i].getAbsolutePath();
-
-                    // check for supported file extension
-                    if (IsSupportedFile(filePath)) {
-                        // Add image path to array list
-                        filePaths.add(filePath);
-                    }
-                }
-            } else {
-                // image directory is empty
-                Toast.makeText(mContext, AppConstants.HAPPY_MOMENTS_ALBUM + " is empty.", Toast.LENGTH_LONG).show();
-            }
-
-        } else {
-            AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
-            alert.setTitle("Error!").setMessage(AppConstants.HAPPY_MOMENTS_ALBUM + " directory path is not valid!");
-            alert.setPositiveButton("OK", null);
-            alert.show();
-        }
-
-        return filePaths;
-    }
-
-    // Check supported file extensions
     private boolean IsSupportedFile(String filePath) {
         String extension = filePath.substring((filePath.lastIndexOf(".") + 1),
                 filePath.length());
@@ -114,16 +73,6 @@ public class Utils {
 
     }
 
-
-    //return the angle degree from one point to another point
-    public double calcAngleBetweenPoints(double srcX ,double srcY , double targetX , double targetY) {
-        double angle  = Math.toDegrees(Math.atan2(targetY - srcY, targetX - srcX));
-
-        if (angle < 0) {
-            angle += 360;
-        }
-        return  angle;
-    }
 
     public double calcEuclidDistance(double x1 , double y1 , double x2 , double y2) {
         double x ,y;
@@ -151,7 +100,6 @@ public class Utils {
         columnWidth = point.x;
         return columnWidth;
     }
-
 
 
 
@@ -218,40 +166,6 @@ public class Utils {
 
 
 
-//    public ArrayList<String> getImagesPathFromExternal() {
-//        ArrayList<String> filePaths = new ArrayList<String>();
-//        final String appDirectoryName = AppConstants.HAPPY_MOMENTS_ALBUM;
-//        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES+"/"+ appDirectoryName);
-//        if (!path.isDirectory()) {
-//            AlertDialog.Builder alert = new AlertDialog.Builder(mContext);
-//            alert.setTitle("Error!").setMessage(AppConstants.HAPPY_MOMENTS_ALBUM + " directory path is not valid!");
-//            alert.setPositiveButton("OK", null);
-//            alert.show();
-//            return null;
-//        }
-//
-//        File[] listFiles = path.listFiles();
-//        if (listFiles.length > 0) {
-//
-//            for (int i = 0; i < listFiles.length; i++) {
-//
-//                // get file path
-//                String filePath = listFiles[i].getAbsolutePath();
-//
-//                // check for supported file extension
-//                if (IsSupportedFile(filePath)) {
-//                    // Add image path to array list
-//                    filePaths.add(filePath);
-//                }
-//            }
-//        } else {
-//            Toast.makeText(mContext, AppConstants.HAPPY_MOMENTS_ALBUM + " is empty.", Toast.LENGTH_LONG).show();
-//        }
-//
-//        return filePaths;
-//    }
-
-
     public boolean isExternalStorageWritable(){
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state)){
@@ -260,61 +174,42 @@ public class Utils {
         return false;
     }
 
-//    public boolean isExternalStorageReadable(){
-//        String state = Environment.getExternalStorageState();
-//        if (Environment.MEDIA_MOUNTED.equals(state) ||
-//                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)){
-//            return true;
-//        }
-//        return false;
-//    }
 
-    //Resizing image size
-    public static Bitmap decodeFile(String filePath, int width, int height) {
-        try {
+    public static void createAlbumIfNotExist() {
+        final String appDirectoryName = AppConstants.HAPPY_MOMENTS_ALBUM;
 
-            File f = new File(filePath);
+        //Create Path to save Image
+        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES+"/"+ appDirectoryName);
 
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
-            int scale = 1;
-            while (o.outWidth / scale / 2 >= width && o.outHeight / scale / 2 >= height)
-                scale *= 2;
+        //if there is no directory exist
+        if (!path.isDirectory())
+            path.mkdirs();
 
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = scale;
-            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
-
 
     public static void copyFile(File srcFile , File destFile) {
         if (!srcFile.exists()) {
             return;
         }
+        createAlbumIfNotExist();
 
-        FileChannel src = null;
-        FileChannel dest = null;
+        FileChannel src ,dest ;
 
         try {
             src = new FileInputStream(srcFile).getChannel();
+            dest = new FileOutputStream(destFile).getChannel();
 
-        dest = new FileOutputStream(destFile).getChannel();
+            if (dest != null && src != null) {
+                dest.transferFrom(src , 0, src.size());
+            }
 
-        if (dest != null && src != null) {
-            dest.transferFrom(src , 0, src.size());
-        }
-        if (src != null) {
-            src.close();
-        }
-        if(dest != null) {
-            dest.close();
-        }
+            if (src != null) {
+                src.close();
+            }
 
+            if (dest != null) {
+                dest.close();
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

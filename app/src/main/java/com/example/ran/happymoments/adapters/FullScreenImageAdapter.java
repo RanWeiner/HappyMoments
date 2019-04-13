@@ -20,21 +20,13 @@ import com.example.ran.happymoments.R;
 
 public class FullScreenImageAdapter extends PagerAdapter {
 
-    public interface OnClickListener {
-        void onCloseBtnClick();
-    }
-
-
     private Context mContext;
     private ArrayList<String> mImagesPath;
-    private LayoutInflater inflater;
 
-    private final OnClickListener listener;
-
-    public FullScreenImageAdapter(Context context, ArrayList<String> imagePaths , OnClickListener listener) {
+    public FullScreenImageAdapter(Context context, ArrayList<String> imagePaths) {
         this.mContext = context;
         this.mImagesPath = imagePaths;
-        this.listener = listener;
+
     }
 
     @Override
@@ -50,33 +42,19 @@ public class FullScreenImageAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
         ImageView imgDisplay;
-        Button btnClose;
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View viewLayout = inflater.inflate(R.layout.layout_fullscreen_image, container, false);
-
         imgDisplay = (ImageView) viewLayout.findViewById(R.id.imgDisplay);
-        btnClose = (Button) viewLayout.findViewById(R.id.btnClose);
-
-
         Uri uri = Uri.fromFile(new File(mImagesPath.get(position)));
         Glide.clear(imgDisplay);
         Glide.with(mContext).load(uri).crossFade().centerCrop().into(imgDisplay);
-        btnClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.onCloseBtnClick();
-            }
-        });
-
         ((ViewPager) container).addView(viewLayout);
-
         return viewLayout;
     }
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         ((ViewPager) container).removeView((RelativeLayout) object);
-
     }
 
 }

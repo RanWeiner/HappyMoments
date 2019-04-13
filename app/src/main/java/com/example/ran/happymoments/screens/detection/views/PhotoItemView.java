@@ -2,7 +2,7 @@ package com.example.ran.happymoments.screens.detection.views;
 
 import android.view.View;
 
-import com.example.ran.happymoments.BaseView;
+import com.example.ran.happymoments.common.BaseView;
 
 public interface PhotoItemView extends BaseView {
 

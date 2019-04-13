@@ -1,6 +1,6 @@
 package com.example.ran.happymoments.screens.main.views;
 
-import com.example.ran.happymoments.BaseView;
+import com.example.ran.happymoments.common.BaseView;
 
 public interface MainActivityView extends BaseView {
 

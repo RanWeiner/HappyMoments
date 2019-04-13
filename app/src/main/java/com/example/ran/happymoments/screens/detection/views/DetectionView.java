@@ -1,7 +1,7 @@
 package com.example.ran.happymoments.screens.detection.views;
 
 
-import com.example.ran.happymoments.BaseView;
+import com.example.ran.happymoments.common.BaseView;
 
 public interface DetectionView extends BaseView {
 

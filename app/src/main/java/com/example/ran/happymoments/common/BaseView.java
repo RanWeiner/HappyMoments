@@ -1,4 +1,4 @@
-package com.example.ran.happymoments;
+package com.example.ran.happymoments.common;
 
 import android.content.Context;
 import android.os.Bundle;
