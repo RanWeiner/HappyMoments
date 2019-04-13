@@ -26,7 +26,7 @@ public class PhotoItemViewImpl implements PhotoItemView {
     private String mPath;
 
     public PhotoItemViewImpl(LayoutInflater inflater, @Nullable ViewGroup parent) {
-        mRootView = inflater.inflate(R.layout.custom_layout, parent, false);
+        mRootView = inflater.inflate(R.layout.image_item_layout, parent, false);
         mRemoveButton = mRootView.findViewById(R.id.ib_remove);
         mImageView = mRootView.findViewById(R.id.iv);
 
@@ -82,6 +82,7 @@ public class PhotoItemViewImpl implements PhotoItemView {
         mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         Uri uri = Uri.fromFile(new File(mPath));
         Glide.clear(mImageView);
+
         Glide.with(mImageView.getContext()).load(uri).into(mImageView);
     }
 

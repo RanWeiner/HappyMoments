@@ -1,5 +1,7 @@
 package com.example.ran.happymoments.screens.detection.views;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -7,12 +9,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+//import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.example.ran.happymoments.R;
 import com.example.ran.happymoments.screens.detection.DetectionActivity;
+import com.google.android.gms.fido.fido2.api.common.RequestOptions;
 
 import java.util.List;
 
@@ -21,7 +30,7 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
     private View mRootView;
     private Button mDetectBtn , mAddBtn;
     private ProgressBar mProgressBar;
-
+    private Dialog mLoaderDialog;
     private RecyclerView mRecyclerPhotos;
     private RecycleViewImageAdapter mAdapter;
 
@@ -32,7 +41,7 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
         mDetectBtn = mRootView.findViewById(R.id.detect_btn_id);
         mAddBtn = mRootView.findViewById(R.id.add_more_btn);
         mProgressBar = mRootView.findViewById(R.id.progress_bar);
-
+        mLoaderDialog  = new Dialog(getContext());
         mRecyclerPhotos = mRootView.findViewById(R.id.gallery);
         mRecyclerPhotos.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
@@ -87,12 +96,15 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
     }
 
     public void detectionStarted() {
+        showDialog();
         Toast.makeText(getContext() , "Start Detection...",Toast.LENGTH_LONG).show();
-        mProgressBar.setVisibility(View.VISIBLE);
-        mDetectBtn.setEnabled(false);
+//        mProgressBar.setVisibility(View.VISIBLE);
+//        mDetectBtn.setEnabled(false);
+//        mAddBtn.setEnabled(false);
     }
 
     public void detectionFinished() {
+        hideDialog();
         Toast.makeText(getContext(), "Finished!",Toast.LENGTH_LONG).show();
         mProgressBar.setVisibility(View.INVISIBLE);
         mDetectBtn.setEnabled(true);
@@ -104,6 +116,10 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
 
     public void updateViews() {
         mAdapter.notifyDataSetChanged();
+    }
+
+    public void hideDialog(){
+        mLoaderDialog.dismiss();
     }
 
 
@@ -118,4 +134,23 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
     }
 
 
+    public void showDialog() {
+        mLoaderDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mLoaderDialog.setCancelable(false);
+        mLoaderDialog.setContentView(R.layout.loading_layout);
+
+        ImageView gifImageView = mLoaderDialog.findViewById(R.id.custom_loading_imageView);
+        GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(gifImageView);
+
+        Glide.with(getContext())
+                .load(R.drawable.load_gif)
+//                .load(R.drawable.loader)
+//                .placeholder(R.drawable.loader)
+//                .centerCrop()
+                .crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .into(gifImageView);
+
+        mLoaderDialog.show();
+    }
 }

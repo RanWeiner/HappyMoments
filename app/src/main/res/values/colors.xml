@@ -8,5 +8,6 @@
     <color name="colorNormal">#265b89</color>
     <color name="colorPressed">#4082bc</color>
     <color name="title_background">#4082bc</color>
+    <color name="gif_red">#cb5151</color>
 
 </resources>

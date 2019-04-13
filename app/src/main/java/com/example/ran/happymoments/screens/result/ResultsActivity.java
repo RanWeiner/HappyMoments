@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.ArraySet;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.ran.happymoments.R;
@@ -31,6 +32,7 @@ public class ResultsActivity extends AppCompatActivity {
     private ViewPager mPager;
     private FloatingActionButton mShareBtn;
     private FloatingActionButton mSaveBtn;
+    private Button mBackToMenuBtn;
     private int currentPage=0;
     private Set<String> mSavedPhotos;
 
@@ -46,6 +48,22 @@ public class ResultsActivity extends AppCompatActivity {
     }
 
     private void init() {
+        if (mResultsPhotosPath.size() == 0) {
+            //show message to user - No faces found
+            setContentView(R.layout.activity_no_results);
+            mBackToMenuBtn = (Button) findViewById(R.id.back_to_menu);
+            mBackToMenuBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    goToMainActivity();
+                }
+            });
+        } else {
+            initializeViews();
+        }
+    }
+
+    public void initializeViews(){
         mPager = (ViewPager) findViewById(R.id.pager);
         mSaveBtn = (FloatingActionButton)findViewById(R.id.save_btn);
         mShareBtn = (FloatingActionButton)findViewById(R.id.share_btn);
@@ -103,7 +121,8 @@ public class ResultsActivity extends AppCompatActivity {
                     mSavedPhotos.add(path);
                     Toast.makeText(ResultsActivity.this , "saved!" , Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(ResultsActivity.this , "photo already saved..." , Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(ResultsActivity.this , "photo already saved..." , Toast.LENGTH_SHORT).show();
             }
         });
     }

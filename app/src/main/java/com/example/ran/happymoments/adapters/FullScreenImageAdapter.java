@@ -61,8 +61,6 @@ public class FullScreenImageAdapter extends PagerAdapter {
         Uri uri = Uri.fromFile(new File(mImagesPath.get(position)));
         Glide.clear(imgDisplay);
         Glide.with(mContext).load(uri).crossFade().centerCrop().into(imgDisplay);
-
-
         btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

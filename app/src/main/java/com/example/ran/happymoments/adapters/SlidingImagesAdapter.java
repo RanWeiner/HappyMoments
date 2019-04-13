@@ -47,8 +47,9 @@ import java.util.ArrayList;
             ImageView imageView = (ImageView)imageLayout.findViewById(R.id.image);
 
             Uri uri = Uri.fromFile(new File(mImages.get(position)));
+
             Glide.clear(imageView);
-            Glide.with(mContext).load(uri).crossFade().centerCrop().into(imageView);
+            Glide.with(mContext).load(uri).fitCenter().crossFade().into(imageView);
 
             view.addView(imageLayout);
 
