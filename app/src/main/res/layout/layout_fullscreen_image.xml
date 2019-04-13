@@ -16,14 +16,7 @@
         android:layout_height="match_parent"
          />
 
-    <ImageButton
-        android:id="@+id/share_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_share_btn"
-        android:layout_gravity="end"
 
-        />
 
     <Button
         android:id="@+id/btnClose"

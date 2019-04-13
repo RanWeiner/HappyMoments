@@ -13,21 +13,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.MainActivity">
+        <activity android:name=".screens.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".activities.AlbumActivity"
+            android:name=".screens.pager.FullScreenViewActivity"
             android:theme="@android:style/Theme.Holo.NoActionBar" />
-        <activity
-            android:name=".activities.FullScreenViewActivity"
-            android:theme="@android:style/Theme.Holo.NoActionBar" />
-        <activity android:name=".activities.DetectionActivity" />
-        <activity android:name=".activities.ResultsActivity" />
+
+        <activity android:name=".screens.detection.DetectionActivity" />
+        <activity android:name=".screens.result.ResultsActivity" />
 
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
@@ -44,7 +43,6 @@
             />
         </provider>
 
-        <activity android:name=".activities.DetectionActivity_take2"></activity>
     </application>
 
 </manifest>

@@ -2,18 +2,22 @@ package com.example.ran.happymoments.common;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 
+import com.example.ran.happymoments.screens.detection.DetectionActivity;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,24 +34,32 @@ public class Utils {
 
     private Context mContext;
 
-
     public Utils(Context context) {
         this.mContext = context;
     }
 
-//    public static double normalizeData(double data) {
-//
-//        return  ((data - Double.MIN_VALUE) / (Double.MAX_VALUE - Double.MIN_VALUE));
-//    }
 
+    public static void connectToNetwork(final Context context) {
 
-    public static double pitagoras (double x , double y){
-        return Math.sqrt((x*x)+(y*y));
-    }
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        Intent intent=new Intent(Settings.ACTION_SETTINGS);
+                        context.startActivity(intent);
+                        break;
 
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
 
-    public static double normalize(double data, double max, double min) {
-        return  ((data - min) / (max - min));
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("No Internet").setMessage("This App requires Internet connections ")
+                .setPositiveButton("Connect", dialogClickListener).setNegativeButton("Exit", dialogClickListener).show();
     }
 
     // Reading file paths from SDCard
@@ -188,6 +200,20 @@ public class Utils {
         }
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         return new File(mediaStorageDir.getPath() + File.separator + "IMG_" +timestamp +".jpg");
+    }
+
+
+    public static File createPhotoFile() {
+        String name = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File image = null;
+
+        try {
+            image = File.createTempFile(name , ".jpg" , storageDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
     }
 
 

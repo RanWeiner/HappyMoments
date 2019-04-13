@@ -46,4 +46,10 @@ dependencies {
     implementation 'com.android.support:exifinterface:27.1.1'
 
     implementation 'com.android.support:cardview-v7:27.1.1'
+
+    //round indicator for sliding images
+    implementation 'com.githang:viewpagerindicator:2.4.2@aar'
+
+    //floating button
+    implementation 'com.getbase:floatingactionbutton:1.10.1'
 }
