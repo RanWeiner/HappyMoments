@@ -3,6 +3,11 @@
   <component name="WizardSettings">
     <option name="children">
       <map>
+        <entry key="imageWizard">
+          <value>
+            <PersistentState />
+          </value>
+        </entry>
         <entry key="vectorWizard">
           <value>
             <PersistentState>
@@ -28,8 +33,12 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_remove_circle" />
-                            <entry key="sourceFile" value="C:\Users\ran" />
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="height" value="450" />
+                            <entry key="outputName" value="ic_bg" />
+                            <entry key="overrideSize" value="true" />
+                            <entry key="sourceFile" value="C:\Users\idan\Documents\Final Project\background\bg.svg" />
+                            <entry key="width" value="300" />
                           </map>
                         </option>
                       </PersistentState>

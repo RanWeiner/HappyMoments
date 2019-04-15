@@ -1,26 +1,46 @@
-<LinearLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-
 android:orientation="vertical"
+    android:background="@drawable/app_background"
 tools:context=".screens.main.MainActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo_center"
+        android:layout_centerInParent="true"
+        android:elevation="100dp"/>
 
 
     <Button
         android:id="@+id/import_btn"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="Import" />
+        android:background="@drawable/round_shadow"
+        android:text="Import"
+        android:layout_above="@id/camera_btn"
+        android:layout_centerInParent="true"
+        android:textColor="@color/white"
+        android:layout_marginBottom="10dp"
+
+        />
 
     <Button
         android:id="@+id/camera_btn"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="Camera" />
+        android:background="@drawable/round_shadow_white"
+        android:textColor="@color/black"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="20dp"
+        android:text="Camera"
+        />
 
-</LinearLayout>
+</RelativeLayout>
 
 
 

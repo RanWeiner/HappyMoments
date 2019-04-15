@@ -9,9 +9,9 @@
             android:scaleType="centerCrop"
             android:id="@+id/iv"
             android:adjustViewBounds="true"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="1dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:padding="1dp"
             android:src="@drawable/ic_launcher_background"
 
             />

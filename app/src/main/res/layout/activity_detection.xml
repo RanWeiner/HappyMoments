@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
+    android:background="@color/theme_grey"
     android:orientation="vertical"
     android:weightSum="1">
 
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/gallery"
-        android:background="@color/black"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"

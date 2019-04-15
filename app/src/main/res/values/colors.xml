@@ -10,4 +10,14 @@
     <color name="title_background">#4082bc</color>
     <color name="gif_red">#cb5151</color>
 
+    <!--> THEME COLORS<-->
+    <color name="theme_black">#111111</color>
+    <color name="theme_dark_grey">#333333</color>
+    <color name="theme_grey">#f2f2f2</color>
+    <color name="theme_white">#fff</color>
+    <color name="theme_red">#fc5759</color>
+    <color name="theme_deep_red">#cb5050</color>
+
+
+
 </resources>

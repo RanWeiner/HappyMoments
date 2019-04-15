@@ -6,7 +6,7 @@ import com.example.ran.happymoments.common.BaseView;
 
 public interface PhotoItemView extends BaseView {
 
-    public interface Listener {
+     interface Listener {
         void onItemDelete(int position);
         void onItemClick(int position);
     }
