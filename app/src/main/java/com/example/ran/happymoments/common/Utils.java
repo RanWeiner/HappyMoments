@@ -32,7 +32,7 @@ import java.util.Locale;
 
 public class Utils {
 
-    private Context mContext;
+    private Context mContext; //not in use! Utils is more static class, so we never create instance of Utils
 
     public Utils(Context context) {
         this.mContext = context;
@@ -154,6 +154,7 @@ public class Utils {
     public static File createPhotoFile() {
         String name = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+//        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM + "/Camera");
         File image = null;
 
         try {
@@ -175,6 +176,20 @@ public class Utils {
     }
 
 
+    ///////////////////////////
+    public static void scanFile(Context context, String path) {
+
+        MediaScannerConnection.scanFile(context,new String[] { path }, null,new MediaScannerConnection.OnScanCompletedListener() {
+            public void onScanCompleted(String path, Uri uri) {
+                Log.i("ExternalStorage", "Scanned " + path + ":");
+                Log.i("ExternalStorage", "-> uri=" + uri);
+            }
+        });
+
+
+    }
+
+
     public static void createAlbumIfNotExist() {
         final String appDirectoryName = AppConstants.HAPPY_MOMENTS_ALBUM;
 
@@ -187,7 +202,7 @@ public class Utils {
 
     }
 
-    public static void copyFile(File srcFile , File destFile) {
+    public static void copyFile(Context context, File srcFile , File destFile) {
         if (!srcFile.exists()) {
             return;
         }
@@ -201,6 +216,7 @@ public class Utils {
 
             if (dest != null && src != null) {
                 dest.transferFrom(src , 0, src.size());
+                scanFile(context ,destFile.getAbsolutePath());
             }
 
             if (src != null) {

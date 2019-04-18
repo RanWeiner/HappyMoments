@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -25,7 +26,8 @@ import java.util.List;
 public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapter.Listener {
 
     private View mRootView;
-    private Button mDetectBtn , mAddBtn;
+    private ImageButton mDetectBtn ;
+    private Button mAddBtn;
     private Dialog mLoaderDialog;
     private RecyclerView mRecyclerPhotos;
     private RecycleViewImageAdapter mAdapter;

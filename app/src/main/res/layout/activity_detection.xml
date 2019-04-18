@@ -4,7 +4,9 @@
     android:layout_height="match_parent"
     android:background="@color/theme_grey"
     android:orientation="vertical"
-    android:weightSum="1">
+    android:layoutDirection="ltr">
+    <!--android:weightSum="1">-->
+
 
 
     <android.support.v7.widget.RecyclerView
@@ -17,55 +19,29 @@
     </android.support.v7.widget.RecyclerView>
 
 
-    <LinearLayout
-        android:id="@+id/upper_screen"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_weight="0.8">
-
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:layout_centerHorizontal="true"
-            android:visibility="invisible"
-            android:layout_gravity="center"
-            />
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:layout_weight="0.8">
 
-            <Button
+            <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/detect_btn_id"
                 android:text="Detect"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center"
-                android:gravity="center"
-
+                android:src="@drawable/ic_magic_button"
+                android:background="#00000000"
+                android:layout_centerHorizontal="true"
                 />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/add_more_btn"
-                android:layout_toRightOf="@+id/detect_btn_id"
                 android:text="add"
-                android:layout_marginLeft="50dp"/>
+                android:layout_below="@id/detect_btn_id"/>
 
         </RelativeLayout>
-
-
-
-
-    </LinearLayout>
-
-
-
 
 </LinearLayout>

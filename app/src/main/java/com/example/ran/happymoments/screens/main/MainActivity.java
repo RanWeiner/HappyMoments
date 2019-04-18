@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView.
 
     private void goToCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        Intent intent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
         if (intent.resolveActivity(getPackageManager()) != null) {
             File photoFile = null;
             photoFile = Utils.createPhotoFile();
@@ -80,6 +81,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView.
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(intent , AppConstants.CAMERA_REQUEST_CODE);
             }
+
+
         }
     }
 

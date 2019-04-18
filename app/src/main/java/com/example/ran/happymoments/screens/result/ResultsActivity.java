@@ -61,7 +61,7 @@ public class ResultsActivity extends AppCompatActivity implements ResultsViewImp
     }
 
     private void copyPhotoToAlbum(String path){
-        Utils.copyFile(new File(path) ,Utils.getOutputMediaFile());
+        Utils.copyFile(getApplicationContext(),new File(path) ,Utils.getOutputMediaFile());
     }
 
     private void copyPhotosToAlbum() {
