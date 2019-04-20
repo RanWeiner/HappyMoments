@@ -36,24 +36,6 @@ public class ResultsActivity extends AppCompatActivity implements ResultsViewImp
 
         }
 
-//    private void init() {
-//
-//
-//        if (mResultsPhotosPath.size() == 0) {
-//            //show message to user - No faces found
-//            setContentView(R.layout.activity_no_results);
-//            mBackToMenuBtn = (Button) findViewById(R.id.back_to_menu);
-//            mBackToMenuBtn.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    goToMainActivity();
-//                }
-//            });
-//        } else {
-//            initializeViews();
-//        }
-//    }
-
 
     @Override
     protected void onStart() {
@@ -100,10 +82,11 @@ public class ResultsActivity extends AppCompatActivity implements ResultsViewImp
         if (!mSavedPhotos.contains(path)) {
             copyPhotoToAlbum(path);
             mSavedPhotos.add(path);
-            Toast.makeText(ResultsActivity.this , "saved!" , Toast.LENGTH_SHORT).show();
+            mView.savedClicked(true);
         }
-        else
-            Toast.makeText(ResultsActivity.this , "photo already saved..." , Toast.LENGTH_SHORT).show();
+        else {
+            mView.savedClicked(false);
+        }
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.ran.happymoments.R;
 import com.example.ran.happymoments.adapters.SlidingImagesAdapter;
@@ -62,19 +63,9 @@ public class ResultsViewImpl implements ResultsView {
         });
 
 
-        mShareBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mListener.onShareClicked();
-            }
-        });
+        mShareBtn.setOnClickListener(view -> mListener.onShareClicked());
 
-        mSaveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mListener.onSaveClicked();
-            }
-        });
+        mSaveBtn.setOnClickListener(view -> mListener.onSaveClicked());
 
     }
 
@@ -100,23 +91,29 @@ public class ResultsViewImpl implements ResultsView {
 
     @Override
     public void showExitDialog() {
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which){
-                    case DialogInterface.BUTTON_POSITIVE:
-                        mListener.onExitClicked();
-                        break;
+        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    mListener.onExitClicked();
+                    break;
 
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        dialog.dismiss();
-                        break;
-                }
+                case DialogInterface.BUTTON_NEGATIVE:
+                    dialog.dismiss();
+                    break;
             }
         };
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Finish").setMessage("Go to Main Menu? ")
                 .setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+    }
+
+    @Override
+    public void savedClicked(boolean success) {
+        if (success) {
+            Toast.makeText(getContext(), "saved!" , Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext(), "photo already saved..." , Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

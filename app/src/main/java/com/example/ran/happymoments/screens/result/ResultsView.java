@@ -6,6 +6,7 @@ public interface ResultsView extends BaseView {
 
     void registerLister(Listener listener);
     void showExitDialog();
+    void savedClicked(boolean success);
 
     interface Listener {
         void onShareClicked();

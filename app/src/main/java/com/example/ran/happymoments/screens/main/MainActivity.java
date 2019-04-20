@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.util.Log;
-import android.widget.Toast;
 
 
 import com.example.ran.happymoments.screens.detection.DetectionActivity;
@@ -29,6 +28,8 @@ import org.opencv.android.OpenCVLoader;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import in.myinnos.awesomeimagepicker.activities.AlbumSelectActivity;
 import in.myinnos.awesomeimagepicker.helpers.ConstantsCustomGallery;
@@ -42,7 +43,7 @@ import static android.support.constraint.Constraints.TAG;
 public class MainActivity extends AppCompatActivity implements MainActivityView.Listener {
 
     MainActivityViewImpl mView;
-    ArrayList<String> chosenImagesPath = new ArrayList<>();
+    List<String> chosenImagesPath = new ArrayList<>();
 
     private String pathToFile;
     public int numPicturesTaken = 0;
@@ -161,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView.
         }
 
         else if (requestCode == ConstantsCustomGallery.REQUEST_CODE && data != null) {
-                    ArrayList<Image> chosenImages = data.getParcelableArrayListExtra(ConstantsCustomGallery.INTENT_EXTRA_IMAGES);
+                    List<Image> chosenImages = data.getParcelableArrayListExtra(ConstantsCustomGallery.INTENT_EXTRA_IMAGES);
                     chosenImagesPath = getImagesPath(chosenImages);
                     goToDetectionActivity(chosenImagesPath);
 
@@ -171,28 +172,31 @@ public class MainActivity extends AppCompatActivity implements MainActivityView.
                         chosenImagesPath.add(pathToFile);
                         goToCamera();
                     } else {
-                        Toast.makeText(MainActivity.this , "You can take 10 pictures max each time",Toast.LENGTH_SHORT).show();
+                        Log.i("limit","num of pictures taken crossed limit");
                     }
                     Log.i("counter" , "count = " + numPicturesTaken);
                 }
     }
 
-    private ArrayList<String> getImagesPath(ArrayList<Image> chosenImages) {
+    private List<String> getImagesPath(List<Image> chosenImages) {
 
-        ArrayList<String> rv = new ArrayList<>();
+        return chosenImages.stream().map(p->p.path).collect(Collectors.toList());
+//        return chosenImages.stream().map(p -> p.path).collect(Collectors.toList());
 
-        for (Image image : chosenImages) {
-            rv.add(image.path);
-        }
-        return rv;
+//        ArrayList<String> rv = new ArrayList<>();
+//
+//        for (Image image : chosenImages) {
+//            rv.add(image.path);
+//        }
+//        return rv;
     }
 
 
-    private void goToDetectionActivity(ArrayList<String> photos) {
+    private void goToDetectionActivity(List<String> photos) {
         Intent intent = new Intent(MainActivity.this, DetectionActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putStringArrayList(AppConstants.IMPORTED_IMAGES , photos);
-
+        ArrayList<String> selectedPhotos = new ArrayList<String>(photos);
+        bundle.putStringArrayList(AppConstants.IMPORTED_IMAGES , selectedPhotos);
         intent.putExtras(bundle);
         startActivity(intent);
         finish();

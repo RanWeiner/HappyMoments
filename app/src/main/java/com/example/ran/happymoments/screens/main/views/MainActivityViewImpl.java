@@ -40,18 +40,8 @@ public class MainActivityViewImpl implements MainActivityView {
 
 
     public void  setViewsListeners() {
-      mImportBtn.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            mListener.onImportClicked();
-        }
-    });
-      mCameraBtn.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            mListener.onCameraClicked();
-        }
-    });
+      mImportBtn.setOnClickListener(v -> mListener.onImportClicked());
+      mCameraBtn.setOnClickListener(v -> mListener.onCameraClicked());
 }
 
 

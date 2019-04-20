@@ -1,10 +1,13 @@
 package com.example.ran.happymoments.screens.detection;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +29,8 @@ import com.example.ran.happymoments.service.SeriesGeneratorImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import in.myinnos.awesomeimagepicker.activities.AlbumSelectActivity;
 import in.myinnos.awesomeimagepicker.helpers.ConstantsCustomGallery;
@@ -73,18 +78,28 @@ public class DetectionActivity extends AppCompatActivity implements DetectionVie
         }
         if (requestCode == ConstantsCustomGallery.REQUEST_CODE && data != null) {
             ArrayList<Image> chosenImages = data.getParcelableArrayListExtra(ConstantsCustomGallery.INTENT_EXTRA_IMAGES);
-            for (Image i : chosenImages) {
-                if (!mInputPhotosPath.contains(i.path)) {
-                    mInputPhotosPath.add(i.path);
-                }
-            }
+
+            Set set = chosenImages.stream().map(i->i.path).collect(Collectors.toSet());
+            set.addAll(mInputPhotosPath);
+            mInputPhotosPath = new ArrayList<>(set);
+
+
+//            for (Image i : chosenImages) {
+//                if (!mInputPhotosPath.contains(i.path)) {
+//                    mInputPhotosPath.add(i.path);
+//                }
+//            }
+
+
             mView.updateViews();
         }
     }
 
 
     private void showNetworkError() {
-        Utils.connectToNetwork(this);
+
+        mView.showNetworkDialog();
+//        Utils.connectToNetwork(this);
     }
 
 
@@ -110,21 +125,14 @@ public class DetectionActivity extends AppCompatActivity implements DetectionVie
         mView.detectionStarted();
         long startTime = System.nanoTime();
 
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
+        Thread t = new Thread(() -> {
+            mOutputPhotosPath = mSeriesGenerator.detect(mInputPhotosPath);
 
-                mOutputPhotosPath = mSeriesGenerator.detect(mInputPhotosPath);
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        mView.detectionFinished();
-                        goToResultsActivity();
-                    }
-                });
-            }
+            runOnUiThread(() -> {
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                mView.detectionFinished();
+                goToResultsActivity();
+            });
         });
         t.start();
 
@@ -176,5 +184,11 @@ public class DetectionActivity extends AppCompatActivity implements DetectionVie
     public void onItemDelete(int position) {
         mInputPhotosPath.remove(position);
         mView.updateViews();
+    }
+
+    @Override
+    public void onNetworkAccessClicked() {
+        Intent intent=new Intent(Settings.ACTION_SETTINGS);
+        startActivity(intent);
     }
 }

@@ -1,8 +1,12 @@
 package com.example.ran.happymoments.screens.detection.views;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -52,19 +56,9 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
 
     private void setViewsListeners() {
 
-        mAddBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onAddPhotosClicked();
-            }
-        });
+        mAddBtn.setOnClickListener(v -> mListener.onAddPhotosClicked());
 
-        mDetectBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onDetectClicked();
-            }
-        });
+        mDetectBtn.setOnClickListener(v -> mListener.onDetectClicked());
     }
 
     @Override
@@ -94,12 +88,12 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
 
     public void detectionStarted() {
         showDialog();
-        Toast.makeText(getContext() , "Start Detection...",Toast.LENGTH_LONG).show();
+//        Toast.makeText(getContext() , "Start Detection...",Toast.LENGTH_LONG).show();
     }
 
     public void detectionFinished() {
         hideDialog();
-        Toast.makeText(getContext(), "Finished!",Toast.LENGTH_LONG).show();
+//        Toast.makeText(getContext(), "Finished!",Toast.LENGTH_LONG).show();
     }
 
     public void bindPhotos(List<String> photosPath) {
@@ -136,13 +130,31 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
 
         Glide.with(getContext())
                 .load(R.drawable.load_gif)
-//                .load(R.drawable.loader)
-//                .placeholder(R.drawable.loader)
-//                .centerCrop()
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(gifImageView);
 
         mLoaderDialog.show();
+    }
+
+    public void showNetworkDialog() {
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        mListener.onNetworkAccessClicked();
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("No Internet").setMessage("This App requires Internet connections ")
+                .setPositiveButton("Connect", dialogClickListener).setNegativeButton("Exit", dialogClickListener).show();
     }
 }

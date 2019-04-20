@@ -47,7 +47,7 @@ public class Photo {
 
     public boolean similarTo(Photo other){
        // return mFeatures.compareFeatures(other.getFeatures());
-        return mFeatures.compareFeatures2(other.getFeatures());
+        return mFeatures.compareFeatures(other.getFeatures());
     }
 
     public PhotoFeatures getFeatures() {

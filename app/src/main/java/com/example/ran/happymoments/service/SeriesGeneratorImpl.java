@@ -5,11 +5,8 @@ import android.support.media.ExifInterface;
 import android.util.Log;
 
 import com.example.ran.happymoments.model.face.Face;
-import com.example.ran.happymoments.model.face.FaceMatcher;
 import com.example.ran.happymoments.model.photo.Person;
 import com.example.ran.happymoments.model.photo.Photo;
-import com.example.ran.happymoments.model.photo.PhotoFeatures;
-import com.example.ran.happymoments.model.photo.Ranker;
 import com.example.ran.happymoments.model.series.PhotoSeries;
 import com.example.ran.happymoments.service.detector.FaceDetector;
 import com.example.ran.happymoments.service.detector.MobileVision;

@@ -39,28 +39,28 @@ public class Utils {
     }
 
 
-    public static void connectToNetwork(final Context context) {
-
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which){
-                    case DialogInterface.BUTTON_POSITIVE:
-                        Intent intent=new Intent(Settings.ACTION_SETTINGS);
-                        context.startActivity(intent);
-                        break;
-
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        dialog.dismiss();
-                        break;
-                }
-            }
-        };
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("No Internet").setMessage("This App requires Internet connections ")
-                .setPositiveButton("Connect", dialogClickListener).setNegativeButton("Exit", dialogClickListener).show();
-    }
+//    public static void connectToNetwork(final Context context) {
+//
+//        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                switch (which){
+//                    case DialogInterface.BUTTON_POSITIVE:
+//                        Intent intent=new Intent(Settings.ACTION_SETTINGS);
+//                        context.startActivity(intent);
+//                        break;
+//
+//                    case DialogInterface.BUTTON_NEGATIVE:
+//                        dialog.dismiss();
+//                        break;
+//                }
+//            }
+//        };
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+//        builder.setTitle("No Internet").setMessage("This App requires Internet connections ")
+//                .setPositiveButton("Connect", dialogClickListener).setNegativeButton("Exit", dialogClickListener).show();
+//    }
 
     private boolean IsSupportedFile(String filePath) {
         String extension = filePath.substring((filePath.lastIndexOf(".") + 1),
@@ -74,67 +74,67 @@ public class Utils {
     }
 
 
-    public double calcEuclidDistance(double x1 , double y1 , double x2 , double y2) {
-        double x ,y;
-
-        x = x1 - x2;
-        y = y1 - y2;
-
-        return Math.sqrt(x*x + y*y);
-    }
-
-
-    // Getting screen width
-    public int getScreenWidth() {
-        int columnWidth;
-        WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-
-        final Point point = new Point();
-        try {
-            display.getSize(point);
-        } catch (java.lang.NoSuchMethodError ignore) { // Older device
-            point.x = display.getWidth();
-            point.y = display.getHeight();
-        }
-        columnWidth = point.x;
-        return columnWidth;
-    }
+//    public double calcEuclidDistance(double x1 , double y1 , double x2 , double y2) {
+//        double x ,y;
+//
+//        x = x1 - x2;
+//        y = y1 - y2;
+//
+//        return Math.sqrt(x*x + y*y);
+//    }
 
 
+//    // Getting screen width
+//    public int getScreenWidth() {
+//        int columnWidth;
+//        WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+//        Display display = wm.getDefaultDisplay();
+//
+//        final Point point = new Point();
+//        try {
+//            display.getSize(point);
+//        } catch (java.lang.NoSuchMethodError ignore) { // Older device
+//            point.x = display.getWidth();
+//            point.y = display.getHeight();
+//        }
+//        columnWidth = point.x;
+//        return columnWidth;
+//    }
 
-    //https://stackoverflow.com/questions/11983654/android-how-to-add-an-image-to-an-album
-    public void saveImageToExternal(Bitmap bm) throws IOException {
 
-        final String appDirectoryName = AppConstants.HAPPY_MOMENTS_ALBUM;
 
-        File imageFile = getOutputMediaFile();
-
-        //Create Path to save Image
-        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES+"/"+ appDirectoryName);
-
-        //if there is no directory exist
-        if (!path.isDirectory())
-            path.mkdirs();
-
-        FileOutputStream out = new FileOutputStream(imageFile);
-        try{
-            bm.compress(Bitmap.CompressFormat.PNG, 100, out); // Compress Image
-            out.flush();
-            out.close();
-
-            // Tell the media scanner about the new file so that it is
-            // immediately available to the user.
-            MediaScannerConnection.scanFile(mContext,new String[] { imageFile.getAbsolutePath() }, null,new MediaScannerConnection.OnScanCompletedListener() {
-                public void onScanCompleted(String path, Uri uri) {
-                    Log.i("ExternalStorage", "Scanned " + path + ":");
-                    Log.i("ExternalStorage", "-> uri=" + uri);
-                }
-            });
-        } catch(Exception e) {
-            throw new IOException();
-        }
-    }
+//    //https://stackoverflow.com/questions/11983654/android-how-to-add-an-image-to-an-album
+//    public void saveImageToExternal(Bitmap bm) throws IOException {
+//
+//        final String appDirectoryName = AppConstants.HAPPY_MOMENTS_ALBUM;
+//
+//        File imageFile = getOutputMediaFile();
+//
+//        //Create Path to save Image
+//        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES+"/"+ appDirectoryName);
+//
+//        //if there is no directory exist
+//        if (!path.isDirectory())
+//            path.mkdirs();
+//
+//        FileOutputStream out = new FileOutputStream(imageFile);
+//        try{
+//            bm.compress(Bitmap.CompressFormat.PNG, 100, out); // Compress Image
+//            out.flush();
+//            out.close();
+//
+//            // Tell the media scanner about the new file so that it is
+//            // immediately available to the user.
+//            MediaScannerConnection.scanFile(mContext,new String[] { imageFile.getAbsolutePath() }, null,new MediaScannerConnection.OnScanCompletedListener() {
+//                public void onScanCompleted(String path, Uri uri) {
+//                    Log.i("ExternalStorage", "Scanned " + path + ":");
+//                    Log.i("ExternalStorage", "-> uri=" + uri);
+//                }
+//            });
+//        } catch(Exception e) {
+//            throw new IOException();
+//        }
+//    }
 
 
     public static File getOutputMediaFile(){
