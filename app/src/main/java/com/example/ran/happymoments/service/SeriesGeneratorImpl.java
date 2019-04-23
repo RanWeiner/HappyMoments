@@ -25,16 +25,20 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
     private FaceDetector mFaceDetector;
     private List<String> mPhotosOutputPath;
 
+    private Boolean isDetectorReleased;
+
 
     public SeriesGeneratorImpl(Context context) {
         mContext = context;
         mFaceDetector = new MobileVision(context);
         mPhotosOutputPath = new ArrayList<>();
+        isDetectorReleased = false;
     }
 
 
     @Override
     public List<String> detect(List<String> inputPhotosPath) {
+        restartDetector();
 
         List<PhotoSeries> seriesList = generateAllSeries(inputPhotosPath);
 
@@ -69,8 +73,10 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
         return mPhotosOutputPath;
     }
 
-
-
+    private void restartDetector() {
+        if(isDetectorReleased)
+            mFaceDetector = new MobileVision(mContext);
+    }
 
 
     //set importance of face in each photo between 0-1
@@ -143,6 +149,7 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
 
         //release the detector
         mFaceDetector.release();
+        isDetectorReleased = true;
 
         for (Map.Entry<Integer, List<Photo>> entry : map.entrySet()) {
             if (entry.getValue().size() == 1) {

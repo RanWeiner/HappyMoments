@@ -20,11 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".screens.pager.FullScreenViewActivity"
             android:theme="@android:style/Theme.Holo.NoActionBar" />
-
         <activity android:name=".screens.detection.DetectionActivity" />
         <activity android:name=".screens.result.ResultsActivity" />
 

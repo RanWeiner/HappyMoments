@@ -23,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/content/ic_remove_circle_outline_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_face_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -33,12 +33,12 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="assetSourceType" value="FILE" />
-                            <entry key="height" value="450" />
-                            <entry key="outputName" value="ic_light_bg" />
+                            <entry key="color" value="ffffff" />
+                            <entry key="height" value="90" />
+                            <entry key="outputName" value="ic_face_white" />
                             <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="C:\Users\idan\Documents\Final Project\App Design\background\light_bg.svg" />
-                            <entry key="width" value="300" />
+                            <entry key="sourceFile" value="C:\Users\idan\Documents\Final Project\App Design\detection_activity\sparkles.svg" />
+                            <entry key="width" value="90" />
                           </map>
                         </option>
                       </PersistentState>

@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Happy Moments</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="not_found_title">Sorry</string>
+    <string name="not_found_body">There were no faces detected in the photos you chose. You can choose new photos and try again or take them now!</string>
+
 
 </resources>

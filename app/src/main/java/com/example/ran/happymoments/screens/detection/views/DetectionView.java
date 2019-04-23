@@ -11,6 +11,7 @@ public interface DetectionView extends BaseView {
         void onItemClicked(int position);
         void onItemDelete(int position);
         void onNetworkAccessClicked();
+        void onConfirmDialogClicked();
     }
 
     void registerLister(Listener listener);

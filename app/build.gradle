@@ -43,7 +43,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:3.7.0'
 
     //picker
-    implementation 'com.android.support:design:27.1.0'
+    implementation 'com.android.support:design:27.1.1'
     implementation 'com.github.myinnos:AwesomeImagePicker:1.0.2'
 
     //exif
@@ -57,6 +57,4 @@ dependencies {
     //floating button
     implementation 'com.getbase:floatingactionbutton:1.10.1'
 
-    //Bottom App Bar
-//    implementation 'com.google.android.material:material:1.1.0-alpha1'
 }

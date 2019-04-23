@@ -13,6 +13,7 @@
     <!--> THEME COLORS<-->
     <color name="theme_black">#111111</color>
     <color name="theme_dark_grey">#333333</color>
+    <color name="theme_light_grey">#ced3db</color>
     <color name="theme_grey">#f2f2f2</color>
     <color name="theme_white">#fff</color>
     <color name="theme_red">#fc5759</color>

@@ -12,9 +12,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.example.ran.happymoments.R;
 import com.example.ran.happymoments.common.AppConstants;
 
 
@@ -126,12 +129,15 @@ public class DetectionActivity extends AppCompatActivity implements DetectionVie
         long startTime = System.nanoTime();
 
         Thread t = new Thread(() -> {
-            mOutputPhotosPath = mSeriesGenerator.detect(mInputPhotosPath);
+            if(mInputPhotosPath.size() > 0)
+                mOutputPhotosPath = mSeriesGenerator.detect(mInputPhotosPath);
 
             runOnUiThread(() -> {
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 mView.detectionFinished();
-                goToResultsActivity();
+                if(mOutputPhotosPath.size() > 0)
+                    goToResultsActivity();
+                else mView.showNotFoundDialog();
             });
         });
         t.start();
@@ -190,5 +196,10 @@ public class DetectionActivity extends AppCompatActivity implements DetectionVie
     public void onNetworkAccessClicked() {
         Intent intent=new Intent(Settings.ACTION_SETTINGS);
         startActivity(intent);
+    }
+
+    @Override
+    public void onConfirmDialogClicked() {
+        mView.hideNotFoundDialog();
     }
 }

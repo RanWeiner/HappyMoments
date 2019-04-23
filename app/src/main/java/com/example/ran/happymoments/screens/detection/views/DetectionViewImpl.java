@@ -4,9 +4,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,11 +16,9 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-//import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.example.ran.happymoments.R;
 import com.example.ran.happymoments.adapters.RecycleViewImageAdapter;
@@ -32,7 +30,9 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
     private View mRootView;
     private ImageButton mDetectBtn ;
     private Button mAddBtn;
+    private Button mConfirmDialogBtn;
     private Dialog mLoaderDialog;
+    private Dialog mNotFoundDialog;
     private RecyclerView mRecyclerPhotos;
     private RecycleViewImageAdapter mAdapter;
 
@@ -40,18 +40,32 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
 
     public DetectionViewImpl(LayoutInflater inflater, ViewGroup container) {
         mRootView = inflater.inflate(R.layout.activity_detection, container);
-        mDetectBtn = mRootView.findViewById(R.id.detect_btn_id);
+//        mDetectBtn = mRootView.findViewById(R.id.detect_btn_id);
+        mDetectBtn = mRootView.findViewById(R.id.detect_btn);
         mAddBtn = mRootView.findViewById(R.id.add_more_btn);
         mLoaderDialog  = new Dialog(getContext());
+
         mRecyclerPhotos = mRootView.findViewById(R.id.gallery);
         mRecyclerPhotos.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
         mRecyclerPhotos.setLayoutManager(layoutManager);
 
+
         mAdapter = new RecycleViewImageAdapter(inflater, this);
         mRecyclerPhotos.setAdapter(mAdapter);
 
+        setupNotFoundDialog();
         setViewsListeners();
+    }
+
+    public void setupNotFoundDialog() {
+        //==================================================
+        //              Not Found Dialog
+        //==================================================
+        mNotFoundDialog  = new Dialog(getContext());
+//        mNotFoundDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mNotFoundDialog.setContentView(R.layout.layout_no_results); //???
+        mConfirmDialogBtn = mNotFoundDialog.findViewById(R.id.confirm_btn);
     }
 
     private void setViewsListeners() {
@@ -59,6 +73,8 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
         mAddBtn.setOnClickListener(v -> mListener.onAddPhotosClicked());
 
         mDetectBtn.setOnClickListener(v -> mListener.onDetectClicked());
+
+        mConfirmDialogBtn.setOnClickListener(v -> mListener.onConfirmDialogClicked());
     }
 
     @Override
@@ -108,6 +124,8 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
         mLoaderDialog.dismiss();
     }
 
+    public void hideNotFoundDialog() { mNotFoundDialog.dismiss();}
+
 
     @Override
     public void onItemClick(int position) {
@@ -119,9 +137,18 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
         mListener.onItemDelete(position);
     }
 
+    public void showNotFoundDialog() {
+//        mNotFoundDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        mNotFoundDialog.setCancelable(false);
+//        mNotFoundDialog.setContentView(R.layout.layout_no_results);
+        mNotFoundDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        mNotFoundDialog.show();
+    }
+
 
     public void showDialog() {
-        mLoaderDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        mLoaderDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mLoaderDialog.setCancelable(false);
         mLoaderDialog.setContentView(R.layout.loading_layout);
 
@@ -138,18 +165,15 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
     }
 
     public void showNetworkDialog() {
-        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which){
-                    case DialogInterface.BUTTON_POSITIVE:
-                        mListener.onNetworkAccessClicked();
-                        break;
+        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    mListener.onNetworkAccessClicked();
+                    break;
 
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        dialog.dismiss();
-                        break;
-                }
+                case DialogInterface.BUTTON_NEGATIVE:
+                    dialog.dismiss();
+                    break;
             }
         };
 

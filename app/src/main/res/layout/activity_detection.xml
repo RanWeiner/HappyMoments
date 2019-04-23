@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/theme_grey"
@@ -7,7 +9,7 @@
     android:layoutDirection="ltr">
     <!--android:weightSum="1">-->
 
-
+        <include layout="@layout/toolbar"></include>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/gallery"
@@ -22,26 +24,40 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_weight="0.8">
 
-            <ImageButton
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/detect_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/detect_btn_id"
-                android:text="Detect"
-                android:src="@drawable/ic_magic_button"
-                android:background="#00000000"
-                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
+                android:layout_margin="16dp"
+                app:fab_size="normal"
+                android:src="@drawable/ic_wand"
+                android:backgroundTint="@color/theme_deep_red"
                 />
+
+            <!--<ImageButton-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/detect_btn_id"-->
+                <!--android:text="Detect"-->
+                <!--android:src="@drawable/ic_magic_button"-->
+                <!--android:background="#00000000"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--/>-->
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/add_more_btn"
                 android:text="add"
-                android:layout_below="@id/detect_btn_id"/>
+                />
+
+
 
         </RelativeLayout>
+
 
 </LinearLayout>
