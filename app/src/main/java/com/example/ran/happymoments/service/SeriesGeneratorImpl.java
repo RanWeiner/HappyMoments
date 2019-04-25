@@ -38,6 +38,7 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
 
     @Override
     public List<String> detect(List<String> inputPhotosPath) {
+        //checks if the detector was released, if so restarts detector
         restartDetector();
 
         List<PhotoSeries> seriesList = generateAllSeries(inputPhotosPath);

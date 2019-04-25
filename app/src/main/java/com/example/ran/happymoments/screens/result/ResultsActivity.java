@@ -99,6 +99,16 @@ public class ResultsActivity extends AppCompatActivity implements ResultsViewImp
     public void onExitClicked() {
         goToMainActivity();
     }
+
+    @Override
+    public void onPositiveClicked() {
+        goToMainActivity();
+    }
+
+    @Override
+    public void onNegativeClicked() {
+        mView.hideExitDialog();
+    }
 }
 
 

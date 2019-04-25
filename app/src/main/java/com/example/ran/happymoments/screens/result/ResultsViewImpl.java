@@ -1,13 +1,17 @@
 package com.example.ran.happymoments.screens.result;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.ran.happymoments.R;
@@ -26,6 +30,8 @@ public class ResultsViewImpl implements ResultsView {
     private CirclePageIndicator mIndicator;
     private Listener mListener;
     private SlidingImagesAdapter mAdapter;
+    private Dialog mExitDialog;
+    private Button mPositiveBtn, mNegativeBtn;
 
 
     public ResultsViewImpl(LayoutInflater inflater, ViewGroup container, ArrayList<String> mResultsPhotosPath) {
@@ -37,7 +43,16 @@ public class ResultsViewImpl implements ResultsView {
         mAdapter = new SlidingImagesAdapter(getContext(),mResultsPhotosPath);
         mPager.setAdapter(mAdapter);
 
+        setupExitDialog();
+
         setViews();
+    }
+
+    public void setupExitDialog() {
+        mExitDialog  = new Dialog(getContext());
+        mExitDialog.setContentView(R.layout.layout_exit); //???
+        mPositiveBtn = mExitDialog.findViewById(R.id.positive_btn);
+        mNegativeBtn = mExitDialog.findViewById(R.id.negative_btn);
     }
 
 
@@ -67,6 +82,10 @@ public class ResultsViewImpl implements ResultsView {
 
         mSaveBtn.setOnClickListener(view -> mListener.onSaveClicked());
 
+        mPositiveBtn.setOnClickListener(view -> mListener.onPositiveClicked());
+
+        mNegativeBtn.setOnClickListener(view -> mListener.onNegativeClicked());
+
     }
 
     @Override
@@ -91,28 +110,35 @@ public class ResultsViewImpl implements ResultsView {
 
     @Override
     public void showExitDialog() {
-        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
-            switch (which){
-                case DialogInterface.BUTTON_POSITIVE:
-                    mListener.onExitClicked();
-                    break;
+//        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
+//            switch (which){
+//                case DialogInterface.BUTTON_POSITIVE:
+//                    mListener.onExitClicked();
+//                    break;
+//
+//                case DialogInterface.BUTTON_NEGATIVE:
+//                    dialog.dismiss();
+//                    break;
+//            }
+//        };
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//        builder.setTitle("Are you sure?").setMessage("Any unsaved photo will be deleted")
+//                .setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+        mExitDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        mExitDialog.show();
+    }
 
-                case DialogInterface.BUTTON_NEGATIVE:
-                    dialog.dismiss();
-                    break;
-            }
-        };
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Finish").setMessage("Go to Main Menu? ")
-                .setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+    @Override
+    public void hideExitDialog() {
+        mExitDialog.dismiss();
     }
 
     @Override
     public void savedClicked(boolean success) {
         if (success) {
-            Toast.makeText(getContext(), "saved!" , Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Saved!" , Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(getContext(), "photo already saved..." , Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Photo already saved..." , Toast.LENGTH_SHORT).show();
         }
     }
 

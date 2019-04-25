@@ -6,6 +6,7 @@ public interface ResultsView extends BaseView {
 
     void registerLister(Listener listener);
     void showExitDialog();
+    void hideExitDialog();
     void savedClicked(boolean success);
 
     interface Listener {
@@ -13,5 +14,8 @@ public interface ResultsView extends BaseView {
         void onSaveClicked();
         void onPageSelected(int position);
         void onExitClicked();
+
+        void onPositiveClicked();
+        void onNegativeClicked();
     }
 }
