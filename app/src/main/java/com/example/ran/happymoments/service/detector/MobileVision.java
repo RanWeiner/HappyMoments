@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.support.media.ExifInterface;
+import android.util.Log;
 import android.util.SparseArray;
 
 import com.example.ran.happymoments.common.Position;

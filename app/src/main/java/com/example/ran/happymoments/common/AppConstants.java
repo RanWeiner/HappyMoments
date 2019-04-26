@@ -30,5 +30,5 @@ public class AppConstants {
 
     public static final int CAMERA_PERMISSION = 2;
 
-    public static final int NUM_IMAGE_CHOSEN_LIMIT = 20;
+    public static final int NUM_IMAGE_CHOSEN_LIMIT = 200;
 }

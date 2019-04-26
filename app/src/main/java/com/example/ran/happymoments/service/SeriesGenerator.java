@@ -4,4 +4,6 @@ import java.util.List;
 
 public interface SeriesGenerator {
     List<String> detect(List<String> inputPhotosPath);
+
+    void releaseResources();
 }

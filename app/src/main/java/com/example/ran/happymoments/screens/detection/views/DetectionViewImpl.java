@@ -28,11 +28,9 @@ import java.util.List;
 public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapter.Listener {
 
     private View mRootView;
-    private ImageButton mDetectBtn ;
-    private Button mAddBtn;
+    private ImageButton mDetectBtn,mAddBtn,mClearAllBtn ;
     private Button mConfirmDialogBtn;
-    private Dialog mLoaderDialog;
-    private Dialog mNotFoundDialog;
+    private Dialog mLoaderDialog,mNotFoundDialog;
     private RecyclerView mRecyclerPhotos;
     private RecycleViewImageAdapter mAdapter;
 
@@ -40,9 +38,9 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
 
     public DetectionViewImpl(LayoutInflater inflater, ViewGroup container) {
         mRootView = inflater.inflate(R.layout.activity_detection, container);
-//        mDetectBtn = mRootView.findViewById(R.id.detect_btn_id);
-        mDetectBtn = mRootView.findViewById(R.id.detect_btn);
+        mDetectBtn = mRootView.findViewById(R.id.detect_btn_id);
         mAddBtn = mRootView.findViewById(R.id.add_more_btn);
+        mClearAllBtn = mRootView.findViewById(R.id.clear_all_btn);
         mLoaderDialog  = new Dialog(getContext());
 
         mRecyclerPhotos = mRootView.findViewById(R.id.gallery);
@@ -59,18 +57,16 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
     }
 
     public void setupNotFoundDialog() {
-        //==================================================
-        //              Not Found Dialog
-        //==================================================
         mNotFoundDialog  = new Dialog(getContext());
-//        mNotFoundDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mNotFoundDialog.setContentView(R.layout.layout_no_results); //???
+        mNotFoundDialog.setContentView(R.layout.layout_no_results);
         mConfirmDialogBtn = mNotFoundDialog.findViewById(R.id.confirm_btn);
     }
 
     private void setViewsListeners() {
 
         mAddBtn.setOnClickListener(v -> mListener.onAddPhotosClicked());
+
+        mClearAllBtn.setOnClickListener(v -> mListener.onClearAllClicked());
 
         mDetectBtn.setOnClickListener(v -> mListener.onDetectClicked());
 
@@ -138,17 +134,12 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
     }
 
     public void showNotFoundDialog() {
-//        mNotFoundDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        mNotFoundDialog.setCancelable(false);
-//        mNotFoundDialog.setContentView(R.layout.layout_no_results);
         mNotFoundDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
         mNotFoundDialog.show();
     }
 
 
     public void showDialog() {
-//        mLoaderDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mLoaderDialog.setCancelable(false);
         mLoaderDialog.setContentView(R.layout.loading_layout);
 

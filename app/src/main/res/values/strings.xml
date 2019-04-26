@@ -6,5 +6,8 @@
 
     <string name="exit_title">Are you sure?</string>
     <string name="exit_body">Any unsaved photos will be deleted</string>
+    <string name="negative_button">No, I\'ll stay</string>
+    <string name="positive_button">Yes, I\'m sure</string>
+
 
 </resources>

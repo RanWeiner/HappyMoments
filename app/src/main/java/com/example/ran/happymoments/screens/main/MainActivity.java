@@ -167,14 +167,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView.
                     goToDetectionActivity(chosenImagesPath);
 
                 } else if (requestCode == AppConstants.CAMERA_REQUEST_CODE ) {
-                    if(numPicturesTaken < AppConstants.NUM_IMAGE_CHOSEN_LIMIT) {
                         numPicturesTaken++;
                         chosenImagesPath.add(pathToFile);
                         goToCamera();
-                    } else {
-                        Log.i("limit","num of pictures taken crossed limit");
-                    }
-                    Log.i("counter" , "count = " + numPicturesTaken);
                 }
     }
 

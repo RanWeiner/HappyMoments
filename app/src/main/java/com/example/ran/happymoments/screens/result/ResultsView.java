@@ -13,8 +13,6 @@ public interface ResultsView extends BaseView {
         void onShareClicked();
         void onSaveClicked();
         void onPageSelected(int position);
-        void onExitClicked();
-
         void onPositiveClicked();
         void onNegativeClicked();
     }

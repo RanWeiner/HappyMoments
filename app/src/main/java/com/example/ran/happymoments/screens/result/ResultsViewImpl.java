@@ -110,20 +110,6 @@ public class ResultsViewImpl implements ResultsView {
 
     @Override
     public void showExitDialog() {
-//        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
-//            switch (which){
-//                case DialogInterface.BUTTON_POSITIVE:
-//                    mListener.onExitClicked();
-//                    break;
-//
-//                case DialogInterface.BUTTON_NEGATIVE:
-//                    dialog.dismiss();
-//                    break;
-//            }
-//        };
-//        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-//        builder.setTitle("Are you sure?").setMessage("Any unsaved photo will be deleted")
-//                .setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
         mExitDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         mExitDialog.show();
     }
@@ -131,6 +117,7 @@ public class ResultsViewImpl implements ResultsView {
     @Override
     public void hideExitDialog() {
         mExitDialog.dismiss();
+
     }
 
     @Override

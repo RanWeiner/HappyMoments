@@ -129,7 +129,6 @@ public class DetectionActivity extends AppCompatActivity implements DetectionVie
         long startTime = System.nanoTime();
 
         Thread t = new Thread(() -> {
-            if(mInputPhotosPath.size() > 0)
                 mOutputPhotosPath = mSeriesGenerator.detect(mInputPhotosPath);
 
             runOnUiThread(() -> {
@@ -166,6 +165,11 @@ public class DetectionActivity extends AppCompatActivity implements DetectionVie
         finish();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mSeriesGenerator.releaseResources();
+    }
 
     @Override
     public void onAddPhotosClicked() {
@@ -201,5 +205,11 @@ public class DetectionActivity extends AppCompatActivity implements DetectionVie
     @Override
     public void onConfirmDialogClicked() {
         mView.hideNotFoundDialog();
+    }
+
+    @Override
+    public void onClearAllClicked() {
+        mInputPhotosPath.clear();
+        mView.updateViews();
     }
 }
