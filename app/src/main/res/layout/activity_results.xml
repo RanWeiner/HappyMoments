@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="ltr"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/app_theme_light_grey">
 
 
     <RelativeLayout
@@ -26,8 +27,8 @@
             android:gravity="bottom"
             android:padding="10dip"
             app:centered="true"
-            app:fillColor="#e8e8ec"
-            app:pageColor="#000"
+            app:fillColor="@color/theme_deep_red"
+            app:pageColor="@color/app_theme_light_grey"
             app:snap="false" />
 
 
@@ -36,8 +37,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            app:fab_addButtonColorNormal="@color/colorNormal"
-            app:fab_addButtonColorPressed="@color/colorPressed"
+            app:fab_addButtonColorNormal="@color/app_theme_beige"
+            app:fab_addButtonColorPressed="@color/app_theme_dark_beige"
             app:fab_addButtonPlusIconColor="@color/white"
             app:fab_labelStyle="@style/fab_style"
             >

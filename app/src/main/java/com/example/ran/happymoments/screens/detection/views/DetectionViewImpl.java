@@ -147,7 +147,7 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
         GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(gifImageView);
 
         Glide.with(getContext())
-                .load(R.drawable.load_gif)
+                .load(R.drawable.camera_gif)
                 .crossFade()
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(gifImageView);
