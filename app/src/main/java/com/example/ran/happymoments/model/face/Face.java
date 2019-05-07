@@ -2,12 +2,21 @@ package com.example.ran.happymoments.model.face;
 
 import com.example.ran.happymoments.common.Position;
 
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfFloat;
+import org.opencv.core.MatOfInt;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
+
+import java.util.Arrays;
+
 public class Face {
 
     private Smile smile;
     private Eyes eyes;
     private Position position;
     private float width, height;
+    private Mat histogram;
 
 
     public Face(){
@@ -22,6 +31,7 @@ public class Face {
         this.height = height;
         this.smile = smile;
         this.eyes = eyes;
+
     }
 
 

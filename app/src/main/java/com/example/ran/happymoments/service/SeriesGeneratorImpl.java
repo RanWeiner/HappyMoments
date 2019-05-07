@@ -11,6 +11,16 @@ import com.example.ran.happymoments.model.series.PhotoSeries;
 import com.example.ran.happymoments.service.detector.FaceDetector;
 import com.example.ran.happymoments.service.detector.MobileVision;
 
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfFloat;
+import org.opencv.core.MatOfInt;
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,6 +55,16 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
 
 
         for (PhotoSeries series : seriesList) {
+
+            Log.i("CHECKING...", "Series: " + series.getId() + " has " + series.getNumOfPhotos() + " photos");
+            for(Photo p: series.getPhotos()){
+                Log.i("CHECKING...", "--> Path: " + p.getPath() + " Faces found: " + p.getNumOfPersons() );
+                for(Person per : p.getPersons()) {
+                    Log.i("CHECKING...", "Person #" + per.getId() + ": (" + per.getFace().getPosition().getX() + "," +
+                    per.getFace().getPosition().getY() + ") , width: "+ per.getFace().getWidth() +
+                    "height: " + per.getFace().getHeight());
+                }
+            }
 
             //match all persons in the series of photo by their id's
             FaceMatcher.matchPersons(series);
@@ -136,9 +156,10 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
 
             if (!faces.isEmpty()) {
                 Person[] persons = new Person[faces.size()];
+                Mat[] facesHist = calcFacesHistogram(path , faces);
 
                 for (int i = 0 ; i < faces.size() ; i++) {
-                    persons[i] = new Person(i , faces.get(i));
+                    persons[i] = new Person(i , faces.get(i) , facesHist[i]);
                 }
 
                 Photo photo = new Photo(path ,exifInterface, Arrays.asList(persons));
@@ -148,6 +169,9 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
 
         for (Map.Entry<Integer, List<Photo>> entry : map.entrySet()) {
             if (entry.getValue().size() == 1) {
+//                PhotoSeries photo = new PhotoSeries();
+//                photo.addPhoto(entry.getValue().get(0));
+//                mPhotosOutputPath.add(photo.getPhoto(0).getPath());
                 mPhotosOutputPath.add(entry.getValue().get(0).getPath());
             } else {
 
@@ -160,9 +184,31 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
         return rv;
     }
 
+    private Mat[] calcFacesHistogram(String path, List<Face> faces) {
 
+        Mat src = Imgcodecs.imread(path, Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
+        Mat[] rv = new Mat[faces.size()];
 
+        for (int i = 0 ; i < faces.size() ; i++) {
+            rv[i] = new Mat();
+            Point topLeft = new Point(faces.get(i).getPosition().getX(),faces.get(i).getPosition().getY());
+            Point bottomRight = new Point(faces.get(i).getPosition().getX() + faces.get(i).getWidth(),faces.get(i).getPosition().getY() + faces.get(i).getHeight());
 
+            Mat mask = new Mat(src.rows(), src.cols(), CvType.CV_8U, Scalar.all(0));
+            Imgproc.rectangle(mask,topLeft,bottomRight,new Scalar(255) , -1);
+
+            Mat cropped = new Mat();
+            src.copyTo( cropped, mask );
+            MatOfFloat ranges = new MatOfFloat(0f, 256f);
+            MatOfInt histSize = new MatOfInt(256);
+            Imgproc.calcHist(Arrays.asList(src), new MatOfInt(0), cropped, rv[i], histSize, ranges);
+
+            Mat m = new Mat();
+            cropped.convertTo(m , CvType.CV_32F);
+            rv[i] = m ;
+        }
+        return rv;
+    }
 
 
     private void printSeries(List<PhotoSeries> seriesList) {
@@ -201,6 +247,8 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
             if (seriesList.get(i).getNumOfPhotos() == 1) {
                 mPhotosOutputPath.add(seriesList.get(i).getPhoto(0).getPath());
                 photosToBeRemoved.add(seriesList.get(i));
+                Log.i("CHECKING...", "### Series #"+ seriesList.get(i).getId() + " contains only 1 photo: " +
+                        seriesList.get(i).getPhoto(0).getPath());
             }
         }
         seriesList.removeAll(photosToBeRemoved);
@@ -211,7 +259,7 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
 
     public List<PhotoSeries> generateSeriesByFeatures(List<Photo> photos) {
 
-        List<PhotoSeries> foundSeries =  new ArrayList<>();;
+        List<PhotoSeries> foundSeries =  new ArrayList<>();
         boolean hasFoundSeries;
         PhotoSeries photoSeries = new PhotoSeries();
 

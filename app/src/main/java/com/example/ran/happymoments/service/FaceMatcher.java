@@ -1,9 +1,14 @@
 package com.example.ran.happymoments.service;
 
 
+import android.util.Log;
+
+import com.example.ran.happymoments.Manifest;
 import com.example.ran.happymoments.common.Position;
 import com.example.ran.happymoments.model.photo.Person;
 import com.example.ran.happymoments.model.series.PhotoSeries;
+
+import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,10 +48,19 @@ public class FaceMatcher {
         int rv = 0;
         int numPersons = anyPersons.size();
 
+
+
         for (int i = 0 ; i < numPersons ; i++) {
+            double diffByHistogram = Imgproc.compareHist(person.getFaceHist(), anyPersons.get(i).getFaceHist(), Imgproc.CV_COMP_CORREL);
+            diffByHistogram = 1 - diffByHistogram; //transform the result to 0 - best distance, 1 - worst
+            diffByHistogram = diffByHistogram > 1 ? 1 : diffByHistogram;
+            Log.i("TEST" , "DIF= " + diffByHistogram);
+
             anyPosition = anyPersons.get(i).getFace().getPosition();
             currentDistance = Math.sqrt(Math.pow( basePosition.getX() - anyPosition.getX(),2)
-                                    + Math.pow( basePosition.getY() - anyPosition.getY(),2));
+                                    + Math.pow( basePosition.getY() - anyPosition.getY(),2)
+//                                    + Math.pow(diffByHistogram ,2)
+            );
             if (currentDistance < minDistance) {
                 minDistance = currentDistance;
                 rv = i;

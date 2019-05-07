@@ -67,9 +67,9 @@ public class DetectionActivity extends AppCompatActivity implements DetectionVie
     }
 
 
-    private void chooseImagesFromDeviceGallery() {
+    private void chooseImagesFromDeviceGallery(int imagesChosenLimit) {
         Intent intent = new Intent(DetectionActivity.this, AlbumSelectActivity.class);
-        intent.putExtra(ConstantsCustomGallery.INTENT_EXTRA_LIMIT, AppConstants.NUM_IMAGE_CHOSEN_LIMIT);
+        intent.putExtra(ConstantsCustomGallery.INTENT_EXTRA_LIMIT, imagesChosenLimit);
         startActivityForResult(intent, ConstantsCustomGallery.REQUEST_CODE);
     }
 
@@ -173,7 +173,13 @@ public class DetectionActivity extends AppCompatActivity implements DetectionVie
 
     @Override
     public void onAddPhotosClicked() {
-        chooseImagesFromDeviceGallery();
+        //user reached the limit and can't add more photos
+        if(mInputPhotosPath.size() == AppConstants.NUM_IMAGE_CHOSEN_LIMIT) {
+            //TODO tell the user he can't add more photos
+        }
+        else {
+            chooseImagesFromDeviceGallery(AppConstants.NUM_IMAGE_CHOSEN_LIMIT - mInputPhotosPath.size());
+        }
     }
 
     @Override

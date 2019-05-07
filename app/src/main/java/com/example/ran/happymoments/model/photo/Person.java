@@ -3,22 +3,32 @@ package com.example.ran.happymoments.model.photo;
 
 import com.example.ran.happymoments.model.face.Face;
 
+import org.opencv.core.Mat;
+
 public class Person {
 
 //    private static int idGenerator = 0;
     private int id;
-    Face face;
-    double rank;
-    double importance;
+    private Face face;
+    private double rank;
+    private double importance;
+    private Mat faceHist;
 
 
-    public Person(int id , Face face){
-//        this.id = ++idGenerator;
+    public Person(int id, Face face, Mat faceHist){
         this.face = face;
         this.id = id;
+        this.faceHist = faceHist;
     }
 
 
+    public Mat getFaceHist() {
+        return faceHist;
+    }
+
+    public void setFaceHist(Mat faceHist) {
+        this.faceHist = faceHist;
+    }
 
     public Face getFace() {
         return face;

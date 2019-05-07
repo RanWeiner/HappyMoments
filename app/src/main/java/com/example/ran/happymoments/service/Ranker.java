@@ -46,7 +46,7 @@ public class Ranker {
 
 
     //average between eyesOpen and smile -> multiply the result with the importance percentage
-    public static double calcFaceRank(Face face) {
+    private static double calcFaceRank(Face face) {
         float eyesScore, smileScore;
 
         eyesScore = face.getEyes().getEyesOpenProbability() * 100;
