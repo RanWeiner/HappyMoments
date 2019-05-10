@@ -3,6 +3,8 @@ package com.example.ran.happymoments.model.photo;
 import android.support.media.ExifInterface;
 import android.util.Log;
 
+import com.example.ran.happymoments.common.AppConstants;
+
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfFloat;
 import org.opencv.core.MatOfInt;
@@ -18,36 +20,21 @@ import static android.support.constraint.Constraints.TAG;
 
 public class PhotoFeatures {
 
-    public final int MAX_DISTANCE_DIFF = 500;
-    public final int MAX_SECONDS_DIFF = 600;
-    public final double SIMILARITY_THRESHOLD = 0.3;
-
     private Calendar dateTime;
     private PhotoLocation photoLocation;
     private Mat histogram;
     private String orientation;
 
 
-    public PhotoFeatures(String imagePath, ExifInterface exifInterface) {
+    public PhotoFeatures(ExifInterface exifInterface , Mat histogram) {
         setDate(exifInterface);
         setPhotoLocation(exifInterface);
         setOrientation(exifInterface);
-
-        //some of them might be null - checked
-        Log.d(TAG, "dateTime: " + dateTime.getTime());
-        Log.d(TAG, "photoLocation: " + photoLocation);
-        Log.d(TAG, "orientation: " + orientation.toString());
-        Log.d(TAG, "imagePath: " + imagePath);
-        setHistogram(imagePath);
-        Log.d(TAG, "Mat: " + histogram.toString());
+        setHistogram(histogram);
     }
 
-    private void setHistogram(String imagePath) {
-        Mat img = Imgcodecs.imread(imagePath, Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
-        Mat histogram = new Mat();
-        MatOfFloat ranges = new MatOfFloat(0f, 256f);
-        MatOfInt histSize = new MatOfInt(256);
-        Imgproc.calcHist(Arrays.asList(img), new MatOfInt(0), new Mat(), histogram, histSize, ranges);
+
+    private void setHistogram(Mat histogram) {
         this.histogram = histogram;
     }
 
@@ -105,24 +92,7 @@ public class PhotoFeatures {
     }
 
 
-
-        public boolean compareFeatures(PhotoFeatures other){
-
-            double diffBySeconds = calcTimeDiffBySeconds(other);
-
-            double diffByHistogram = Imgproc.compareHist(histogram, other.getHistogram(), Imgproc.CV_COMP_CORREL);
-            diffByHistogram = 1 - diffByHistogram; //transform the result to 0 - best distance, 1 - worst
-            diffByHistogram = diffByHistogram > 1 ? 1 : diffByHistogram;
-
-            double diffByMeters = calcDistanceDiffByMeters(other);
-
-            double total = Math.sqrt((diffBySeconds * diffBySeconds) + (diffByHistogram * diffByHistogram) + (diffByMeters * diffByMeters));
-
-            return (total <= SIMILARITY_THRESHOLD);
-        }
-
-
-        private double calcDistanceDiffByMeters (PhotoFeatures other){
+        public double calcDistanceDiffByMeters (PhotoFeatures other){
 
             if (photoLocation == null && other.getPhotoLocation() == null) {
                 return 0;
@@ -134,21 +104,21 @@ public class PhotoFeatures {
 
             double distance = calcDistanceBetweenLocations(photoLocation, other.getPhotoLocation());
 
-            return (distance >= MAX_DISTANCE_DIFF) ? 1 : distance / MAX_DISTANCE_DIFF;
+            return (distance >= AppConstants.MAX_DISTANCE_DIFF) ? 1 : distance / AppConstants.MAX_DISTANCE_DIFF;
 
         }
 
 
-        private double calcTimeDiffBySeconds (PhotoFeatures other){
-            if (this.dateTime == null && other == null) {
+        public double calcTimeDiffBySeconds (PhotoFeatures other){
+            if (this.dateTime == null && other.getDateTime() == null) {
                 return 0;
             }
-            if (this.dateTime == null || other == null) {
+            if (this.dateTime == null || other.getDateTime() == null) {
                 return 1;
             }
             double diff = Math.abs(this.getDateTime().getTimeInMillis() - other.getDateTime().getTimeInMillis());
-            diff = (diff /1000) % 60;
-            return (diff >= MAX_SECONDS_DIFF) ? 1 : diff / MAX_SECONDS_DIFF;
+            diff = (diff /1000); //millis to seconds
+            return (diff >= AppConstants.MAX_SECONDS_DIFF) ? 1 : diff / AppConstants.MAX_SECONDS_DIFF;
         }
 
 

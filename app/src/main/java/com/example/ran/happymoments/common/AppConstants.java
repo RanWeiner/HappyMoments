@@ -31,4 +31,10 @@ public class AppConstants {
     public static final int CAMERA_PERMISSION = 2;
 
     public static final int NUM_IMAGE_CHOSEN_LIMIT = 100;
+
+    public static final int MAX_DISTANCE_DIFF = 500;
+
+    public static final int MAX_SECONDS_DIFF = 180;
+
+    public static final double SIMILARITY_THRESHOLD = 0.3;
 }

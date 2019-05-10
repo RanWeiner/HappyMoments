@@ -27,7 +27,7 @@
             android:gravity="bottom"
             android:padding="10dip"
             app:centered="true"
-            app:fillColor="@color/theme_deep_red"
+            app:fillColor="@color/app_theme_dark_beige"
             app:pageColor="@color/app_theme_light_grey"
             app:snap="false" />
 

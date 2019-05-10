@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.media.ExifInterface;
 import android.util.Log;
 
+import com.example.ran.happymoments.common.AppConstants;
 import com.example.ran.happymoments.model.face.Face;
 import com.example.ran.happymoments.model.photo.Person;
 import com.example.ran.happymoments.model.photo.Photo;
@@ -11,13 +12,9 @@ import com.example.ran.happymoments.model.series.PhotoSeries;
 import com.example.ran.happymoments.service.detector.FaceDetector;
 import com.example.ran.happymoments.service.detector.MobileVision;
 
-import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfFloat;
 import org.opencv.core.MatOfInt;
-import org.opencv.core.Point;
-import org.opencv.core.Rect;
-import org.opencv.core.Scalar;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
@@ -35,11 +32,16 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
     private FaceDetector mFaceDetector;
     private List<String> mPhotosOutputPath;
 
+    private FaceMatcher mMatcher;
+    private Ranker mRanker;
+
 
     public SeriesGeneratorImpl(Context context) {
         mContext = context;
         mFaceDetector = new MobileVision(context);
         mPhotosOutputPath = new ArrayList<>();
+        mMatcher = new FaceMatcherImpl();
+        mRanker = new RankerImpl();
     }
 
 
@@ -50,9 +52,6 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
             return inputPhotosPath;
 
         List<PhotoSeries> seriesList = generateAllSeries(inputPhotosPath);
-
-//        printSeries(seriesList);
-
 
         for (PhotoSeries series : seriesList) {
 
@@ -67,19 +66,19 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
             }
 
             //match all persons in the series of photo by their id's
-            FaceMatcher.matchPersons(series);
+            mMatcher.matchPersons(series);
 
             //in each photo in each series set every person face importance to value between 0-1
             setImportanceFaces(series);
 
             //finding the highest ranked photo in series
             int highestRankedPhotoIndex = 0;
-            double highestRank = Ranker.rankPhoto(series.getPhoto(highestRankedPhotoIndex));
+            double highestRank = mRanker.rankPhoto(series.getPhoto(highestRankedPhotoIndex));
             double currentRank;
             Log.i("SCORE" , "photo= " +series.getPhoto(0).getPath()+  ", rank= " + highestRank);
 
             for (int i = 1 ; i < series.getPhotos().size() ; i++) {
-                currentRank = Ranker.rankPhoto(series.getPhoto(i));
+                currentRank = mRanker.rankPhoto(series.getPhoto(i));
                 Log.i("SCORE" , "photo= " +series.getPhoto(i).getPath()+  ", rank= " + currentRank);
                 if (currentRank > highestRank) {
                     highestRank = currentRank;
@@ -101,7 +100,7 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
     //set importance of face in each photo between 0-1
     private void setImportanceFaces(PhotoSeries series) {
 
-        Map<Integer , Double> personMaxFaceSize = new HashMap<>();
+        Map<Integer , Double> personMaxFaceSizeMap = new HashMap<>();
         double currentSize , maxSize;
         int key;
 
@@ -111,14 +110,14 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
                 key = person.getId();
                 currentSize = person.getFaceSize();
 
-                if (personMaxFaceSize.containsKey(key)) {
-                    maxSize = personMaxFaceSize.get(key);
+                if (personMaxFaceSizeMap.containsKey(key)) {
+                    maxSize = personMaxFaceSizeMap.get(key);
 
                     if (person.getFaceSize() > maxSize) {
-                        personMaxFaceSize.put(key , currentSize);
+                        personMaxFaceSizeMap.put(key , currentSize);
                     }
                 } else {
-                    personMaxFaceSize.put(key , currentSize);
+                    personMaxFaceSizeMap.put(key , currentSize);
                 }
             }
         }
@@ -128,17 +127,17 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
 
         for (Photo photo : series.getPhotos()) {
             for (Person person : photo.getPersons()) {
-                double importance = person.getFaceSize() / personMaxFaceSize.get(person.getId()) ;
+                double importance = person.getFaceSize() / personMaxFaceSizeMap.get(person.getId()) ;
                 person.setImportance(importance);
-                Log.i("FACEIMPORTANCE" , photo.getPath() + ", person = " + person.getFace().getPosition().toString()+", importance= " + importance);
+                Log.i("FACEIMPORTANCE" , photo.getPath() + ", person #"+ person.getId()+": " + person.getFace().getPosition().toString()+", importance= " + importance);
             }
         }
     }
 
 
     private List<PhotoSeries> generateAllSeries(List<String> inputPhotosPath) {
-        List<PhotoSeries> rv = new ArrayList<>();
-        Map <Integer , List<Photo>> map = new HashMap<>();
+        List<PhotoSeries> rv;
+        List<Photo> photos = new ArrayList<>();
 
         List<Face> faces;
         ExifInterface exifInterface = null;
@@ -156,59 +155,35 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
 
             if (!faces.isEmpty()) {
                 Person[] persons = new Person[faces.size()];
-                Mat[] facesHist = calcFacesHistogram(path , faces);
 
                 for (int i = 0 ; i < faces.size() ; i++) {
-                    persons[i] = new Person(i , faces.get(i) , facesHist[i]);
+                    persons[i] = new Person(i , faces.get(i));
                 }
 
-                Photo photo = new Photo(path ,exifInterface, Arrays.asList(persons));
-                addPhotoToMap(map , photo , persons.length);
+                Mat hist = calcHistogram(path);
+                photos.add(new Photo(path ,exifInterface, Arrays.asList(persons),hist));
             }
         }
 
-        for (Map.Entry<Integer, List<Photo>> entry : map.entrySet()) {
-            if (entry.getValue().size() == 1) {
-//                PhotoSeries photo = new PhotoSeries();
-//                photo.addPhoto(entry.getValue().get(0));
-//                mPhotosOutputPath.add(photo.getPhoto(0).getPath());
-                mPhotosOutputPath.add(entry.getValue().get(0).getPath());
-            } else {
-
-                rv.addAll(generateSeriesByFeatures(entry.getValue()));
-//                rv.addAll(generateSeriesByFeatures(entry.getValue()));
-            }
-        }
+        rv = generateSeriesByFeatures(photos);
 
         filterAllOnePhotoSeries(rv);
+
         return rv;
     }
 
-    private Mat[] calcFacesHistogram(String path, List<Face> faces) {
 
-        Mat src = Imgcodecs.imread(path, Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
-        Mat[] rv = new Mat[faces.size()];
-
-        for (int i = 0 ; i < faces.size() ; i++) {
-            rv[i] = new Mat();
-            Point topLeft = new Point(faces.get(i).getPosition().getX(),faces.get(i).getPosition().getY());
-            Point bottomRight = new Point(faces.get(i).getPosition().getX() + faces.get(i).getWidth(),faces.get(i).getPosition().getY() + faces.get(i).getHeight());
-
-            Mat mask = new Mat(src.rows(), src.cols(), CvType.CV_8U, Scalar.all(0));
-            Imgproc.rectangle(mask,topLeft,bottomRight,new Scalar(255) , -1);
-
-            Mat cropped = new Mat();
-            src.copyTo( cropped, mask );
-            MatOfFloat ranges = new MatOfFloat(0f, 256f);
-            MatOfInt histSize = new MatOfInt(256);
-            Imgproc.calcHist(Arrays.asList(src), new MatOfInt(0), cropped, rv[i], histSize, ranges);
-
-            Mat m = new Mat();
-            cropped.convertTo(m , CvType.CV_32F);
-            rv[i] = m ;
-        }
-        return rv;
+    private Mat calcHistogram(String imagePath) {
+        Mat img = Imgcodecs.imread(imagePath, Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
+        Mat histogram = new Mat();
+        MatOfFloat ranges = new MatOfFloat(0f, 256f);
+        MatOfInt histSize = new MatOfInt(256);
+        Imgproc.calcHist(Arrays.asList(img), new MatOfInt(0), new Mat(), histogram, histSize, ranges);
+        return histogram;
     }
+
+
+
 
 
     private void printSeries(List<PhotoSeries> seriesList) {
@@ -223,19 +198,7 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
 
 
 
-    private void addPhotoToMap(Map<Integer,List<Photo>> map, Photo photo, int key) {
-        List<Photo> photos = map.get(key);
 
-        //not exist in map
-        if (photos == null) {
-            photos = new ArrayList<>();
-            photos.add(photo);
-            map.put(key, photos);
-        } else {
-            //exist in map
-            photos.add(photo);
-        }
-    }
 
 
     private void filterAllOnePhotoSeries(List<PhotoSeries> seriesList) {
@@ -248,7 +211,7 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
                 mPhotosOutputPath.add(seriesList.get(i).getPhoto(0).getPath());
                 photosToBeRemoved.add(seriesList.get(i));
                 Log.i("CHECKING...", "### Series #"+ seriesList.get(i).getId() + " contains only 1 photo: " +
-                        seriesList.get(i).getPhoto(0).getPath());
+                        seriesList.get(i).getPhoto(0).getPath() + " Faces found: "+ seriesList.get(i).getPhoto(0).getNumOfPersons());
             }
         }
         seriesList.removeAll(photosToBeRemoved);
@@ -276,7 +239,7 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
 
             for (int j = 0 ; j < foundSeries.size() ; j++) {
 
-                if (foundSeries.get(j).getPhoto(0).similarTo( photos.get(i))){
+                if (arePhotosClosedByFeaturesDistance(foundSeries.get(j).getPhoto(0), photos.get(i))) {
                     foundSeries.get(j).addPhoto( photos.get(i));
                     hasFoundSeries = true;
                     break;
@@ -293,6 +256,21 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
 
 
 
+    public boolean arePhotosClosedByFeaturesDistance(Photo p1 , Photo p2){
+
+        double diffBySeconds = p1.getFeatures().calcTimeDiffBySeconds(p2.getFeatures());
+        double diffByHistogram = Imgproc.compareHist(p1.getFeatures().getHistogram(), p2.getFeatures().getHistogram(), Imgproc.CV_COMP_BHATTACHARYYA);
+        double diffByMeters = p1.getFeatures().calcDistanceDiffByMeters(p2.getFeatures());
+
+
+        double total = Math.sqrt((diffBySeconds * diffBySeconds)
+                + (diffByHistogram * diffByHistogram)
+                + (diffByMeters * diffByMeters));
+
+        Log.i("CHECKING...", "==> DifBySec = " + diffBySeconds + " DifByMeters = " + diffByMeters + " DifByHist = " + diffByHistogram );
+        Log.i("CHECKING...", "Total = " + total);
+        return (total <= AppConstants.SIMILARITY_THRESHOLD);
+    }
 
 
 

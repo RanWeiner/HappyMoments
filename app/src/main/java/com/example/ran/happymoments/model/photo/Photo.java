@@ -2,6 +2,8 @@ package com.example.ran.happymoments.model.photo;
 
 import android.support.media.ExifInterface;
 
+import org.opencv.core.Mat;
+
 import java.util.List;
 
 
@@ -13,12 +15,12 @@ public class Photo {
     private double mRank;
 
 
-    public Photo(String path, ExifInterface exifInterface, List<Person> persons){
+    public Photo(String path, ExifInterface exifInterface, List<Person> persons , Mat histogram){
         mPath = path;
         mExif = exifInterface;
         mPersons = persons;
         mRank = 0;
-        setPhotoFeatures();
+        setPhotoFeatures(histogram);
     }
 
 
@@ -38,17 +40,12 @@ public class Photo {
     }
 
 
-    public void setPhotoFeatures() {
+    public void setPhotoFeatures(Mat histogram) {
         if (mExif != null){
-            mFeatures = new PhotoFeatures(mPath , mExif);
+            mFeatures = new PhotoFeatures(mExif , histogram);
         }
     }
 
-
-    public boolean similarTo(Photo other){
-       // return mFeatures.compareFeatures(other.getFeatures());
-        return mFeatures.compareFeatures(other.getFeatures());
-    }
 
     public PhotoFeatures getFeatures() {
         return mFeatures;

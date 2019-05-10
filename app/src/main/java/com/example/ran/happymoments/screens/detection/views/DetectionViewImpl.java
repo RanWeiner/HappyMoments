@@ -16,12 +16,14 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.example.ran.happymoments.R;
 import com.example.ran.happymoments.adapters.RecycleViewImageAdapter;
+import com.example.ran.happymoments.common.AppConstants;
 
 import java.util.List;
 
@@ -29,8 +31,8 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
 
     private View mRootView;
     private ImageButton mDetectBtn,mAddBtn,mClearAllBtn ;
-    private Button mConfirmDialogBtn;
-    private Dialog mLoaderDialog,mNotFoundDialog;
+    private Button mConfirmDialogBtn, mConnectBtn, mCancelBtn;
+    private Dialog mLoaderDialog,mNotFoundDialog, mNetworkDialog;
     private RecyclerView mRecyclerPhotos;
     private RecycleViewImageAdapter mAdapter;
 
@@ -53,6 +55,7 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
         mRecyclerPhotos.setAdapter(mAdapter);
 
         setupNotFoundDialog();
+        setupNetworkConnectionDialog();
         setViewsListeners();
     }
 
@@ -60,6 +63,14 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
         mNotFoundDialog  = new Dialog(getContext());
         mNotFoundDialog.setContentView(R.layout.layout_no_results);
         mConfirmDialogBtn = mNotFoundDialog.findViewById(R.id.confirm_btn);
+    }
+
+    public void setupNetworkConnectionDialog() {
+        mNetworkDialog = new Dialog(getContext());
+        mNetworkDialog.setContentView(R.layout.layout_network_connection);
+        mConnectBtn = mNetworkDialog.findViewById(R.id.connect_btn);
+        mCancelBtn = mNetworkDialog.findViewById(R.id.cancel_btn);
+
     }
 
     private void setViewsListeners() {
@@ -71,6 +82,10 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
         mDetectBtn.setOnClickListener(v -> mListener.onDetectClicked());
 
         mConfirmDialogBtn.setOnClickListener(v -> mListener.onConfirmDialogClicked());
+
+        mConnectBtn.setOnClickListener(v -> mListener.onNetworkAccessClicked());
+
+        mCancelBtn.setOnClickListener(v -> mListener.onCancelClicked());
     }
 
     @Override
@@ -100,12 +115,10 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
 
     public void detectionStarted() {
         showDialog();
-//        Toast.makeText(getContext() , "Start Detection...",Toast.LENGTH_LONG).show();
     }
 
     public void detectionFinished() {
         hideDialog();
-//        Toast.makeText(getContext(), "Finished!",Toast.LENGTH_LONG).show();
     }
 
     public void bindPhotos(List<String> photosPath) {
@@ -121,6 +134,8 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
     }
 
     public void hideNotFoundDialog() { mNotFoundDialog.dismiss();}
+
+    public void hideNetworkDialog() { mNetworkDialog.dismiss();}
 
 
     @Override
@@ -156,20 +171,12 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
     }
 
     public void showNetworkDialog() {
-        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
-            switch (which){
-                case DialogInterface.BUTTON_POSITIVE:
-                    mListener.onNetworkAccessClicked();
-                    break;
+        mNetworkDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        mNetworkDialog.show();
+    }
 
-                case DialogInterface.BUTTON_NEGATIVE:
-                    dialog.dismiss();
-                    break;
-            }
-        };
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("No Internet").setMessage("This App requires Internet connections ")
-                .setPositiveButton("Connect", dialogClickListener).setNegativeButton("Exit", dialogClickListener).show();
+    public void showReachedLimitMessage() {
+        Toast.makeText(getContext(), "Sorry, The limit is " + AppConstants.NUM_IMAGE_CHOSEN_LIMIT + " images", Toast.LENGTH_SHORT).show();
     }
 }

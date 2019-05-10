@@ -25,7 +25,10 @@
     <color name="app_theme_dark_beige">#a48766</color>
     <color name="app_theme_deep_red">#A71616</color>
     <color name="app_theme_red">#F0292A</color>
-    <color name="app_theme_nude">#F2C6AB</color>
+    <!--<color name="app_theme_nude">#F2C6AB</color>-->
+    <color name="app_theme_nude">#B34646</color>
+
+
 
 
 

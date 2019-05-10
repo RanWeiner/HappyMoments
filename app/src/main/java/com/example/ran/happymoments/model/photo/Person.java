@@ -6,29 +6,18 @@ import com.example.ran.happymoments.model.face.Face;
 import org.opencv.core.Mat;
 
 public class Person {
-
-//    private static int idGenerator = 0;
     private int id;
     private Face face;
     private double rank;
     private double importance;
-    private Mat faceHist;
+    private double minDistanceFromBase;
 
-
-    public Person(int id, Face face, Mat faceHist){
+    public Person(int id, Face face){
         this.face = face;
         this.id = id;
-        this.faceHist = faceHist;
+        minDistanceFromBase = Double.MAX_VALUE;
     }
 
-
-    public Mat getFaceHist() {
-        return faceHist;
-    }
-
-    public void setFaceHist(Mat faceHist) {
-        this.faceHist = faceHist;
-    }
 
     public Face getFace() {
         return face;
@@ -65,5 +54,13 @@ public class Person {
 
     public double getImportance() {
         return this.importance;
+    }
+
+    public double getMinDistanceFromBase() {
+        return this.minDistanceFromBase;
+    }
+
+    public void setMinDistanceFromBase(double minDistanceFromBase) {
+        this.minDistanceFromBase = minDistanceFromBase;
     }
 }

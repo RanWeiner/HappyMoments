@@ -3,34 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <!--<com.example.ran.happymoments.common.TouchImageView-->
-        <!--android:id="@+id/imgDisplay"-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="fill_parent"-->
-        <!--android:scaleType="fitCenter" />-->
-
 
     <ImageView
         android:id="@+id/imgDisplay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
          />
-
-
-
-    <Button
-        android:id="@+id/btnClose"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="15dp"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
-        android:textColor="#ffffff"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:text="x" />
 
 </RelativeLayout>

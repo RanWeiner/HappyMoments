@@ -13,6 +13,7 @@ public interface DetectionView extends BaseView {
         void onNetworkAccessClicked();
         void onConfirmDialogClicked();
         void onClearAllClicked();
+        void onCancelClicked();
     }
 
     void registerLister(Listener listener);

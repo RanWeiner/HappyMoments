@@ -9,5 +9,10 @@
     <string name="negative_button">No, I\'ll stay</string>
     <string name="positive_button">Yes, I\'m sure</string>
 
+    <string name="network_error">No Internet</string>
+    <string name="network_error_body">This App requires Internet connection</string>
+    <string name="connect_btn">Connect</string>
+    <string name="cancel_btn">Cancel</string>
+
 
 </resources>

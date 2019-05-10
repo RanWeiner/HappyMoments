@@ -175,7 +175,7 @@ public class DetectionActivity extends AppCompatActivity implements DetectionVie
     public void onAddPhotosClicked() {
         //user reached the limit and can't add more photos
         if(mInputPhotosPath.size() == AppConstants.NUM_IMAGE_CHOSEN_LIMIT) {
-            //TODO tell the user he can't add more photos
+            mView.showReachedLimitMessage();
         }
         else {
             chooseImagesFromDeviceGallery(AppConstants.NUM_IMAGE_CHOSEN_LIMIT - mInputPhotosPath.size());
@@ -204,6 +204,7 @@ public class DetectionActivity extends AppCompatActivity implements DetectionVie
 
     @Override
     public void onNetworkAccessClicked() {
+        mView.hideNetworkDialog();
         Intent intent=new Intent(Settings.ACTION_SETTINGS);
         startActivity(intent);
     }
@@ -217,5 +218,10 @@ public class DetectionActivity extends AppCompatActivity implements DetectionVie
     public void onClearAllClicked() {
         mInputPhotosPath.clear();
         mView.updateViews();
+    }
+
+    @Override
+    public void onCancelClicked() {
+        mView.hideNetworkDialog();
     }
 }
