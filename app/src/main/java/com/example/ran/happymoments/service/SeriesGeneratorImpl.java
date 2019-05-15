@@ -55,18 +55,19 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
 
         for (PhotoSeries series : seriesList) {
 
+
+            //match all persons in the series of photo by their id's
+            mMatcher.matchPersons(series);
+
             Log.i("CHECKING...", "Series: " + series.getId() + " has " + series.getNumOfPhotos() + " photos");
             for(Photo p: series.getPhotos()){
                 Log.i("CHECKING...", "--> Path: " + p.getPath() + " Faces found: " + p.getNumOfPersons() );
                 for(Person per : p.getPersons()) {
                     Log.i("CHECKING...", "Person #" + per.getId() + ": (" + per.getFace().getPosition().getX() + "," +
-                    per.getFace().getPosition().getY() + ") , width: "+ per.getFace().getWidth() +
-                    "height: " + per.getFace().getHeight());
+                            per.getFace().getPosition().getY() + ") , width: "+ per.getFace().getWidth() +
+                            "height: " + per.getFace().getHeight());
                 }
             }
-
-            //match all persons in the series of photo by their id's
-            mMatcher.matchPersons(series);
 
             //in each photo in each series set every person face importance to value between 0-1
             setImportanceFaces(series);
@@ -151,9 +152,17 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
                 e.printStackTrace();
             }
 
+            Log.i("FACES", "Path: " + path);
+
             faces = mFaceDetector.detectFaces(mContext, path ,orientation);
 
-            if (!faces.isEmpty()) {
+//            Log.i("FACES", "Image Path: " + path + " has " + faces.size()+" faces");
+//            for(Face f : faces){
+//                Log.i("FACES", "Smile = " + f.getSmile().getSmilingProbability()+
+//                " Eyes = " + f.getEyes().getEyesOpenProbability());
+//            }
+
+            if (!faces.isEmpty()) { //TODO null check
                 Person[] persons = new Person[faces.size()];
 
                 for (int i = 0 ; i < faces.size() ; i++) {
@@ -162,6 +171,9 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
 
                 Mat hist = calcHistogram(path);
                 photos.add(new Photo(path ,exifInterface, Arrays.asList(persons),hist));
+            }
+            else {
+                Log.i("SERIES", path + " has no faces!");
             }
         }
 
@@ -227,7 +239,7 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
         PhotoSeries photoSeries = new PhotoSeries();
 
         if (photos.isEmpty()) {
-            return null;
+            return foundSeries;
         }
 
         photoSeries.addPhoto(photos.get(0));
@@ -250,6 +262,14 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
                 newPhotoSeries.addPhoto( photos.get(i));
                 foundSeries.add(newPhotoSeries);
             }
+
+        }
+
+        for(PhotoSeries ps: foundSeries) {
+            Log.i("SERIES", "==> Series #" + ps.getId() + " has " + ps.getNumOfPhotos() + " photos");
+            for (Photo p : ps.getPhotos()) {
+                Log.i("SERIES", p.getPath());
+            }
         }
         return foundSeries;
     }
@@ -267,8 +287,8 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
                 + (diffByHistogram * diffByHistogram)
                 + (diffByMeters * diffByMeters));
 
-        Log.i("CHECKING...", "==> DifBySec = " + diffBySeconds + " DifByMeters = " + diffByMeters + " DifByHist = " + diffByHistogram );
-        Log.i("CHECKING...", "Total = " + total);
+        Log.i("DIFF", "==> DifBySec = " + diffBySeconds + " DifByMeters = " + diffByMeters + " DifByHist = " + diffByHistogram );
+        Log.i("DIFF", "Total = " + total);
         return (total <= AppConstants.SIMILARITY_THRESHOLD);
     }
 

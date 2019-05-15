@@ -13,6 +13,7 @@ import com.example.ran.happymoments.model.face.Eyes;
 import com.example.ran.happymoments.model.face.Face;
 import com.example.ran.happymoments.model.face.Smile;
 import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.face.Landmark;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -53,6 +54,10 @@ public class MobileVision  implements FaceDetector {
                     ,new Eyes(faces.valueAt(i).getIsLeftEyeOpenProbability() , faces.valueAt(i).getIsRightEyeOpenProbability())));
 
 
+            Log.i("FACES", "==> Person #" + faces.valueAt(i).getId() + " Landmarks: ");
+            for(Landmark l : faces.valueAt(i).getLandmarks()) {
+                Log.i("FACES", "Position: " + l.getPosition() + " Type: " + l.getType());
+            }
         }
 
         return foundFaces;

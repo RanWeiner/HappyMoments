@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -40,9 +41,15 @@ import in.myinnos.awesomeimagepicker.helpers.ConstantsCustomGallery;
 import in.myinnos.awesomeimagepicker.models.Image;
 
 public class DetectionActivity extends AppCompatActivity implements DetectionViewImpl.Listener{
+    private final String SHARED_PREFS_NAME = "prefs";
+    private final String KEY = "firstStart";
+
     DetectionViewImpl mView;
     private List<String> mInputPhotosPath , mOutputPhotosPath;
     private SeriesGenerator mSeriesGenerator;
+
+    private SharedPreferences mPrefs;
+    private boolean firstStart;
 
 
     @Override
@@ -57,6 +64,22 @@ public class DetectionActivity extends AppCompatActivity implements DetectionVie
         mSeriesGenerator = new SeriesGeneratorImpl(getApplicationContext());
         mOutputPhotosPath = new ArrayList<>();
         setContentView(mView.getRootView());
+        checkAndShowInfoDialog();
+
+
+    }
+
+    private void checkAndShowInfoDialog() {
+        mPrefs  = this.getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
+        firstStart = mPrefs.getBoolean(KEY,true);
+        SharedPreferences.Editor editor = mPrefs.edit();
+
+        if(firstStart) {
+            mView.showInfoDialog();
+            editor.putBoolean(KEY, false);
+            editor.apply();
+        }
+
     }
 
 
@@ -134,6 +157,11 @@ public class DetectionActivity extends AppCompatActivity implements DetectionVie
             runOnUiThread(() -> {
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                 mView.detectionFinished();
+
+                long endTime   = System.nanoTime();
+                long totalTime = endTime - startTime;
+                Log.i("DETECTION TIME", "DETECTION TIME= " + totalTime);
+
                 if(mOutputPhotosPath.size() > 0)
                     goToResultsActivity();
                 else mView.showNotFoundDialog();
@@ -141,9 +169,7 @@ public class DetectionActivity extends AppCompatActivity implements DetectionVie
         });
         t.start();
 
-        long endTime   = System.nanoTime();
-        long totalTime = endTime - startTime;
-        Log.i("DETECTION TIME", "DETECTION TIME= " + totalTime);
+
     }
 
 
@@ -223,5 +249,10 @@ public class DetectionActivity extends AppCompatActivity implements DetectionVie
     @Override
     public void onCancelClicked() {
         mView.hideNetworkDialog();
+    }
+
+    @Override
+    public void onCloseInfoDialogClicked() {
+        mView.hideInfoDialog();
     }
 }

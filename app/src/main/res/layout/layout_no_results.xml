@@ -14,7 +14,6 @@
         app:cardCornerRadius="15dp"
         app:cardBackgroundColor="@color/theme_light_grey"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         >
 
@@ -35,7 +34,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/not_found_title"
             android:text="@string/not_found_title"
-            android:textSize="30dp"
+            android:textSize="30sp"
             android:textStyle="bold"
             android:textAlignment="center"
             />
@@ -49,14 +48,14 @@
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="20dp"
                 android:textAlignment="center"
-                android:textSize="15dp" />
+                android:textSize="15sp" />
 
             <Button
                 android:id="@+id/confirm_btn"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_shadow_white"
-                android:text="OK, got it!"
+                android:text="@string/ok_btn"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"/>
 

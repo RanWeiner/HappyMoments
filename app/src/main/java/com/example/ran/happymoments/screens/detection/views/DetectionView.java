@@ -14,6 +14,7 @@ public interface DetectionView extends BaseView {
         void onConfirmDialogClicked();
         void onClearAllClicked();
         void onCancelClicked();
+        void onCloseInfoDialogClicked();
     }
 
     void registerLister(Listener listener);

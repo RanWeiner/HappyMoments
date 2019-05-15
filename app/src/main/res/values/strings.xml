@@ -15,4 +15,10 @@
     <string name="cancel_btn">Cancel</string>
 
 
+    <string name="refreshInfo">- Clear screen</string>
+    <string name="wandInfo">- Start searching for your best photo</string>
+    <string name="addInfo">- Add photos from gallery</string>
+
+    <string name="ok_btn">OK, got it!</string>
+
 </resources>

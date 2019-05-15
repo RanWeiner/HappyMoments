@@ -31,8 +31,8 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
 
     private View mRootView;
     private ImageButton mDetectBtn,mAddBtn,mClearAllBtn ;
-    private Button mConfirmDialogBtn, mConnectBtn, mCancelBtn;
-    private Dialog mLoaderDialog,mNotFoundDialog, mNetworkDialog;
+    private Button mConfirmDialogBtn, mConnectBtn, mCancelBtn, mCloseInfoDialog;
+    private Dialog mLoaderDialog,mNotFoundDialog, mNetworkDialog, mInfoDialog;
     private RecyclerView mRecyclerPhotos;
     private RecycleViewImageAdapter mAdapter;
 
@@ -56,7 +56,15 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
 
         setupNotFoundDialog();
         setupNetworkConnectionDialog();
+        setupInfoDialog();
+
         setViewsListeners();
+    }
+
+    private void setupInfoDialog() {
+        mInfoDialog = new Dialog(getContext());
+        mInfoDialog.setContentView(R.layout.layout_guide);
+        mCloseInfoDialog = mInfoDialog.findViewById(R.id.confirm_btn);
     }
 
     public void setupNotFoundDialog() {
@@ -86,6 +94,8 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
         mConnectBtn.setOnClickListener(v -> mListener.onNetworkAccessClicked());
 
         mCancelBtn.setOnClickListener(v -> mListener.onCancelClicked());
+
+        mCloseInfoDialog.setOnClickListener(v -> mListener.onCloseInfoDialogClicked());
     }
 
     @Override
@@ -178,5 +188,14 @@ public class DetectionViewImpl implements DetectionView , RecycleViewImageAdapte
 
     public void showReachedLimitMessage() {
         Toast.makeText(getContext(), "Sorry, The limit is " + AppConstants.NUM_IMAGE_CHOSEN_LIMIT + " images", Toast.LENGTH_SHORT).show();
+    }
+
+    public void hideInfoDialog() {
+        mInfoDialog.dismiss();
+    }
+
+    public void showInfoDialog() {
+        mInfoDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        mInfoDialog.show();
     }
 }

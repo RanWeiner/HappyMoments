@@ -7,6 +7,7 @@ import com.example.ran.happymoments.common.AppConstants;
 import com.example.ran.happymoments.model.face.Face;
 import com.example.ran.happymoments.model.photo.Person;
 import com.example.ran.happymoments.model.photo.Photo;
+import com.google.android.gms.vision.face.Landmark;
 
 import java.util.List;
 
@@ -22,6 +23,25 @@ public class RankerImpl implements Ranker {
 
         for(int i = 0 ; i< numOfPersons ; i++)
             photoRank += photo.getPersons().get(i).getRank();
+
+
+
+        Log.i("FACES", "Image Path: " + photo.getPath() + " has " + photo.getNumOfPersons()+" faces");
+        for(Person f : photo.getPersons()){
+//            float eyesScore = f.getFace().getEyes().getEyesOpenProbability() < 0 ? 0 :
+//                    f.getFace().getEyes().getEyesOpenProbability()* 100;
+//            float smileScore = f.getFace().getSmile().getSmilingProbability() < 0 ? 0 :
+//                    f.getFace().getSmile().getSmilingProbability()* 100;
+//            Log.i("FACES", "Smile = " + smileScore +
+//                    " Eyes = " + eyesScore);
+//            Log.i("FACES", "Person #" + f.getId() + " Smile = " + f.getFace().getSmile().getSmilingProbability() +
+//                    " Eyes = " + f.getFace().getEyes().getEyesOpenProbability() + " Importance = " + f.getImportance() + " Total: " + f.getRank());
+
+
+
+
+
+        }
 
         photoRank /= numOfPersons;
         photo.setRank(photoRank);
