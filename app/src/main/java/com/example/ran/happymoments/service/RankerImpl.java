@@ -26,7 +26,7 @@ public class RankerImpl implements Ranker {
 
 
 
-        Log.i("FACES", "Image Path: " + photo.getPath() + " has " + photo.getNumOfPersons()+" faces");
+//        Log.i("FACES", "Image Path: " + photo.getPath() + " has " + photo.getNumOfPersons()+" faces");
         for(Person f : photo.getPersons()){
 //            float eyesScore = f.getFace().getEyes().getEyesOpenProbability() < 0 ? 0 :
 //                    f.getFace().getEyes().getEyesOpenProbability()* 100;
@@ -38,13 +38,15 @@ public class RankerImpl implements Ranker {
 //                    " Eyes = " + f.getFace().getEyes().getEyesOpenProbability() + " Importance = " + f.getImportance() + " Total: " + f.getRank());
 
 
-
+//            Log.i("FACES", "Person #" + f.getId()+"("+f.getFace().getPosition().getX()+" , "+f.getFace().getPosition().getY()+") " + " isSmiling = " + f.getFace().getSmile().isSmiling()
+//            + " areEyesOpen = " + f.getFace().getEyes().areEyesOpen());
 
 
         }
 
         photoRank /= numOfPersons;
         photo.setRank(photoRank);
+        Log.i("Rank","Photo path: " + photo.getPath() + " Rank: " + photoRank);
         return photoRank;
     }
 

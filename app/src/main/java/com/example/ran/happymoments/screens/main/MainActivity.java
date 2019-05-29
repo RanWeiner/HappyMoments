@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView.
 
     private void goToCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        Intent intent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
         if (intent.resolveActivity(getPackageManager()) != null) {
             File photoFile = null;
             photoFile = Utils.createPhotoFile();
@@ -95,63 +94,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView.
     }
 
 
-
-//    private void checkNewShit(int requestCode, int resultCode, Intent data) {
-//
-//        try { // When an Image is picked
-//            if (requestCode == PICK_IMAGE_MULT && resultCode == RESULT_OK && null != data) {
-//                // Get the Image from data
-//                String[] filePathColumn = { MediaStore.Images.Media.DATA };
-//                imagesEncodedList = new ArrayList<String>();
-//                if(data.getData()!=null){
-//                    Uri mImageUri=data.getData();
-//                    // Get the cursor
-//                    Cursor cursor = getContentResolver().query(mImageUri, filePathColumn, null, null, null); // Move to first ro
-//                    cursor.moveToFirst();
-//                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-//                    imageEncoded = cursor.getString(columnIndex);
-//                    cursor.close();
-//                } else {
-//                    if (data.getClipData() != null) {
-//                        ClipData mClipData = data.getClipData();
-//                        ArrayList<Uri> mArrayUri = new ArrayList<Uri>();
-//                        for (int i = 0; i < mClipData.getItemCount(); i++) {
-//                            ClipData.Item item = mClipData.getItemAt(i);
-//                            Uri uri = item.getUri(); mArrayUri.add(uri); // Get the cursor
-//                            Cursor cursor = getContentResolver().query(uri, filePathColumn, null, null, null); // Move to first row
-//                            cursor.moveToFirst(); int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-//                            imageEncoded = cursor.getString(columnIndex);
-//                            imagesEncodedList.add(imageEncoded);
-//                            cursor.close();
-//                        }
-//                     Log.v("LOG_TAG", "Selected Images" + mArrayUri.size());
-//                    }
-//                }
-//        } else {
-//                Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
-//            }
-//    } catch (Exception e) {
-//            Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG) .show();
-//    }
-//    }
-//    public void importImages() {
-//        if (Build.VERSION.SDK_INT >= 23) {
-//            if (!checkPermissionForExternalStorage()) {
-//                checkAndRequestStoragePermission();
-//            } else {
-//                chooseImagesFromDeviceGallery();
-//            }
-//        }else{
-//            chooseImagesFromDeviceGallery();
-//        }
-//    }
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-//        checkNewShit(requestCode , resultCode , data);
 
         if (resultCode != RESULT_OK ) {
             if (numPicturesTaken > 0) {
@@ -176,14 +122,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView.
     private List<String> getImagesPath(List<Image> chosenImages) {
 
         return chosenImages.stream().map(p->p.path).collect(Collectors.toList());
-//        return chosenImages.stream().map(p -> p.path).collect(Collectors.toList());
-
-//        ArrayList<String> rv = new ArrayList<>();
-//
-//        for (Image image : chosenImages) {
-//            rv.add(image.path);
-//        }
-//        return rv;
     }
 
 
@@ -197,20 +135,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityView.
         finish();
     }
 
+    //TODO wrap with try-catch for any case
     private void chooseImagesFromDeviceGallery() {
         Intent intent = new Intent(MainActivity.this, AlbumSelectActivity.class);
         intent.putExtra(ConstantsCustomGallery.INTENT_EXTRA_LIMIT, AppConstants.NUM_IMAGE_CHOSEN_LIMIT);
         startActivityForResult(intent, ConstantsCustomGallery.REQUEST_CODE);
     }
-
-//    private void chooseImagesFromDeviceGallery_2() {
-//        Intent intent = new Intent();
-//        intent.setType("image/*");
-//        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE , true);
-//        intent.setAction(Intent.ACTION_GET_CONTENT);
-//        startActivityForResult(Intent.createChooser(intent , "Select Pictures"),PICK_IMAGE_MULT);
-//    }
-
 
 
     private BaseLoaderCallback baseLoaderCallback = new BaseLoaderCallback(this) {

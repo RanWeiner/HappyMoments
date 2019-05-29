@@ -31,17 +31,6 @@ public class Position {
 
 
 
-    //return the angle degree to target point
-    public double calcAngle(Position targetPosition) {
-        double angle  = Math.toDegrees(Math.atan2(targetPosition.y - this.y, targetPosition.x - this.x));
-
-//        angle = angle + Math.ceil( -angle / 360 ) * 360;
-        if (angle < 0) {
-            angle += 360;
-        }
-        return  angle;
-    }
-
     //return the euclidean distance from target
     public double calcEuclidDistance(Position targetPosition) {
         double x ,y;

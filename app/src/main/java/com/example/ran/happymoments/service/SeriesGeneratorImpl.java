@@ -152,7 +152,7 @@ public class SeriesGeneratorImpl implements SeriesGenerator {
                 e.printStackTrace();
             }
 
-            Log.i("FACES", "Path: " + path);
+//            Log.i("FACES", "Path: " + path);
 
             faces = mFaceDetector.detectFaces(mContext, path ,orientation);
 

@@ -48,7 +48,6 @@ public class FaceMatcherImpl implements FaceMatcher {
 
     private void matchBasePersonToMinDistance(Person basePerson, List<Person> otherPersons) {
         double currentDistance;
-
         for (Person p: otherPersons) {
 
             currentDistance = calculateDistance(basePerson , p);
