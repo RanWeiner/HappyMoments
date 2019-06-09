@@ -24,17 +24,6 @@ public class Photo {
     }
 
 
-
-    //just for trying!!!
-    public Photo(String path, PhotoFeatures features, List<Person> persons) {
-        mPath = path;
-        mFeatures = features;
-        mPersons = persons;
-    }
-
-
-
-
     public String getPath() {
         return this.mPath;
     }
@@ -64,7 +53,6 @@ public class Photo {
     public void addPerson(Person person) {
         this.mPersons.add(person);
     }
-
 
     public double getRank() {
         return mRank;

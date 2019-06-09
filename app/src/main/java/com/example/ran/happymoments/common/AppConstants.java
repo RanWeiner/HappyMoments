@@ -9,9 +9,6 @@ public class AppConstants {
     //SD card image directory
     public static final String HAPPY_MOMENTS_ALBUM = "HappyMoments";
 
-    //supported file formats
-    public static final List<String> SUPPORTED_FILE_EXTENSIONS = Arrays.asList("jpg" , "jpeg" , "png");
-
     public static final String POSITION = "POSITION";
 
     public static final String PHOTOS_PATH = "PHOTOS_PATH";
@@ -19,6 +16,10 @@ public class AppConstants {
     public static final String IMPORTED_IMAGES = "INPUT";
 
     public static final String OUTPUT_PHOTOS = "OUTPUT";
+
+    public static final String SHARED_PREFS_NAME = "prefs";
+
+    public static final String KEY = "firstStart";
 
     public static final double EYES_WEIGHT = 0.4;
 

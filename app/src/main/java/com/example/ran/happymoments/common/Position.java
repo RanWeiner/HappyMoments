@@ -31,16 +31,6 @@ public class Position {
 
 
 
-    //return the euclidean distance from target
-    public double calcEuclidDistance(Position targetPosition) {
-        double x ,y;
-
-        x = this.x - targetPosition.x;
-        y = this.y - targetPosition.y;
-
-        return Math.sqrt(x*x + y*y);
-    }
-
     @Override
     public String toString() {
         return "(" + x + "," +y +")";

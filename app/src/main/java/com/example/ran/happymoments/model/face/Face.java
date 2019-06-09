@@ -16,13 +16,8 @@ public class Face {
     private Eyes eyes;
     private Position position;
     private float width, height;
-    private Mat histogram;
 
-
-    public Face(){
-
-    }
-
+    public Face(){ }
 
     public Face(Position position, float width, float height , Smile smile , Eyes eyes) {
 
@@ -31,10 +26,7 @@ public class Face {
         this.height = height;
         this.smile = smile;
         this.eyes = eyes;
-
     }
-
-
 
     public Smile getSmile() {
         return smile;
@@ -43,21 +35,6 @@ public class Face {
     public Eyes getEyes() {
         return eyes;
     }
-//    public double getDistanceFromGravityCenter() {
-//        return distanceFromGravityCenter;
-//    }
-//
-//    public void setDistanceFromTotalFacesCenter(double distanceFromGravityCenter) {
-//        this.distanceFromGravityCenter = distanceFromGravityCenter;
-//    }
-//
-//    public double getAngleFromGravityCenter() {
-//        return angleFromGravityCenter;
-//    }
-//
-//    public void setAngleFromTotalFacesCenter(double angleFromGravityCenter) {
-//        this.angleFromGravityCenter = angleFromGravityCenter;
-//    }
 
     public Position getPosition() {
         return this.position;

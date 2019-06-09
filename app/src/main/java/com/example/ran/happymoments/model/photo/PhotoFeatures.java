@@ -55,9 +55,6 @@ public class PhotoFeatures {
     private void setDate(ExifInterface exifInterface) {
 
         String dateString = exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
-
-        Log.d(TAG, "dateString: " + dateString);
-
         if (dateString != null) {
             this.dateTime = StringToCalendar(dateString);
         }
@@ -92,7 +89,7 @@ public class PhotoFeatures {
     }
 
 
-        public double calcDistanceDiffByMeters (PhotoFeatures other){
+    public double calcDistanceDiffByMeters (PhotoFeatures other){
 
             if (photoLocation == null && other.getPhotoLocation() == null) {
                 return 0;

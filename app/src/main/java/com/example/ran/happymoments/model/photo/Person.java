@@ -10,12 +10,10 @@ public class Person {
     private Face face;
     private double rank;
     private double importance;
-    private double minDistanceFromBase;
 
     public Person(int id, Face face){
         this.face = face;
         this.id = id;
-        minDistanceFromBase = Double.MAX_VALUE;
     }
 
 
@@ -56,11 +54,4 @@ public class Person {
         return this.importance;
     }
 
-    public double getMinDistanceFromBase() {
-        return this.minDistanceFromBase;
-    }
-
-    public void setMinDistanceFromBase(double minDistanceFromBase) {
-        this.minDistanceFromBase = minDistanceFromBase;
-    }
 }

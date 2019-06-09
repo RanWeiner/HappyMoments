@@ -38,8 +38,6 @@ import in.myinnos.awesomeimagepicker.models.Image;
 import static android.support.constraint.Constraints.TAG;
 
 
-
-
 public class MainActivity extends AppCompatActivity implements MainActivityView.Listener {
 
     MainActivityViewImpl mView;
@@ -67,8 +65,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView.
     }
 
 
-
-
     private void goToCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(getPackageManager()) != null) {
@@ -81,8 +77,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityView.
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(intent , AppConstants.CAMERA_REQUEST_CODE);
             }
-
-
         }
     }
 

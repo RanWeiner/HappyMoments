@@ -6,7 +6,7 @@ import android.view.View;
 
 public interface BaseView {
 
-    public View getRootView();
-    public Bundle getViewState();
-    public Context getContext();
+     View getRootView();
+     Bundle getViewState();
+     Context getContext();
 }

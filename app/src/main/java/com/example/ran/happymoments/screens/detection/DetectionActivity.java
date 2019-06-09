@@ -40,9 +40,9 @@ import in.myinnos.awesomeimagepicker.activities.AlbumSelectActivity;
 import in.myinnos.awesomeimagepicker.helpers.ConstantsCustomGallery;
 import in.myinnos.awesomeimagepicker.models.Image;
 
+import static android.provider.Contacts.SettingsColumns.KEY;
+
 public class DetectionActivity extends AppCompatActivity implements DetectionViewImpl.Listener{
-    private final String SHARED_PREFS_NAME = "prefs";
-    private final String KEY = "firstStart";
 
     DetectionViewImpl mView;
     private List<String> mInputPhotosPath , mOutputPhotosPath;
@@ -70,13 +70,13 @@ public class DetectionActivity extends AppCompatActivity implements DetectionVie
     }
 
     private void checkAndShowInfoDialog() {
-        mPrefs  = this.getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
-        firstStart = mPrefs.getBoolean(KEY,true);
+        mPrefs  = this.getSharedPreferences(AppConstants.SHARED_PREFS_NAME, MODE_PRIVATE);
+        firstStart = mPrefs.getBoolean(AppConstants.KEY,true);
         SharedPreferences.Editor editor = mPrefs.edit();
 
         if(firstStart) {
             mView.showInfoDialog();
-            editor.putBoolean(KEY, false);
+            editor.putBoolean(AppConstants.KEY, false);
             editor.apply();
         }
 
@@ -108,15 +108,6 @@ public class DetectionActivity extends AppCompatActivity implements DetectionVie
             Set set = chosenImages.stream().map(i->i.path).collect(Collectors.toSet());
             set.addAll(mInputPhotosPath);
             mInputPhotosPath = new ArrayList<>(set);
-
-
-//            for (Image i : chosenImages) {
-//                if (!mInputPhotosPath.contains(i.path)) {
-//                    mInputPhotosPath.add(i.path);
-//                }
-//            }
-
-
             mView.updateViews();
         }
     }
@@ -125,7 +116,6 @@ public class DetectionActivity extends AppCompatActivity implements DetectionVie
     private void showNetworkError() {
 
         mView.showNetworkDialog();
-//        Utils.connectToNetwork(this);
     }
 
 

@@ -9,7 +9,6 @@ public class PhotoLocation {
         this.longitude = longitude;
     }
 
-
     public float getLatitude() {
         return latitude;
     }

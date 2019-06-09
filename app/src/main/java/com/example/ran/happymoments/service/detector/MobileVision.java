@@ -52,14 +52,6 @@ public class MobileVision  implements FaceDetector {
                     , faces.valueAt(i).getWidth(), faces.valueAt(i).getHeight()
                     , new Smile(faces.valueAt(i).getIsSmilingProbability())
                     ,new Eyes(faces.valueAt(i).getIsLeftEyeOpenProbability() , faces.valueAt(i).getIsRightEyeOpenProbability())));
-
-
-//            Log.i("FACES", "==> Person #" + faces.valueAt(i).getId() + " Landmarks: ");
-//            for(Landmark l : faces.valueAt(i).getLandmarks()) {
-//                Log.i("FACES", "Position: " + l.getPosition() + " Type: " + l.getType());
-//            }
-
-
         }
 
         return foundFaces;

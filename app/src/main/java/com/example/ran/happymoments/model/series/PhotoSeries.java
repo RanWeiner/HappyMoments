@@ -19,17 +19,9 @@ public class PhotoSeries {
     }
 
 
-
-    public PhotoSeries(List<Photo> photos) {
-        this();
-        this.photos.addAll(photos);
-    }
-
-
     public int getId() {
         return id;
     }
-
 
     public void setId(int id) {
         this.id = id;

@@ -17,6 +17,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 
+import com.example.ran.happymoments.model.photo.Person;
 import com.example.ran.happymoments.screens.detection.DetectionActivity;
 
 import java.io.File;
@@ -38,7 +39,7 @@ public class Utils {
 
     public static File getOutputMediaFile(){
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES),"HappyMoments");
+                Environment.DIRECTORY_PICTURES),AppConstants.HAPPY_MOMENTS_ALBUM);
 
         if (!mediaStorageDir.exists()) {
             if (!mediaStorageDir.mkdirs()) {
@@ -86,6 +87,11 @@ public class Utils {
 
     }
 
+    public static double calculateDistance(Position basePosition, Position otherPosition) {
+        return Math.sqrt(Math.pow( basePosition.getX() - otherPosition.getX(),2)
+                + Math.pow( basePosition.getY() - otherPosition.getY(),2));
+    }
+
     public static void copyFile(Context context, File srcFile , File destFile) {
         if (!srcFile.exists()) {
             return;
@@ -116,7 +122,4 @@ public class Utils {
             e.printStackTrace();
         }
     }
-
-
-
 }
